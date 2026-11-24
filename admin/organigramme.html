@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1f3a">
+<title>Organigramme du Bureau | BUEP-ENS/PN</title>
+
+<style>
+:root{
+ --navy:#0b1f3a;--gold:#d6ad55;--light:#f4f6fa;
+ --text:#243247;--muted:#718096;--border:#e2e7ef;
+ --danger:#bd3434;--success:#24713a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:var(--light);color:var(--text)}
+header{
+ background:var(--navy);color:white;padding:18px 22px;
+ display:flex;justify-content:space-between;align-items:center;gap:12px
+}
+header h1{font-size:19px}
+header p{font-size:12px;color:#cbd5e1;margin-top:5px}
+header a{color:var(--gold);text-decoration:none;font-size:13px;font-weight:bold}
+main{max-width:1050px;margin:auto;padding:25px 16px}
+.intro{margin-bottom:22px}
+.intro h2{color:var(--navy);margin-bottom:7px}
+.intro p{font-size:13px;color:var(--muted);line-height:1.5}
+.feedback{display:none;padding:12px;margin-bottom:17px;border-radius:7px;font-size:13px;line-height:1.5}
+.feedback.error{display:block;background:#fff0ef;color:var(--danger)}
+.feedback.success{display:block;background:#edf8f0;color:var(--success)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.tab{border:1px solid var(--border);background:white;color:var(--navy);padding:11px 16px;border-radius:7px;font-weight:bold;cursor:pointer}
+.tab.active{background:var(--navy);color:white;border-color:var(--navy)}
+.section{display:none}
+.section.active{display:block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px}
+.toolbar h3{color:var(--navy);font-size:17px}
+button{font:inherit;cursor:pointer}
+.primary{background:var(--navy);color:white;border:0;border-radius:7px;padding:11px 15px;font-weight:bold}
+.secondary{background:white;border:1px solid var(--border);padding:10px 14px;border-radius:7px}
+.edit{background:#edf2f8;color:var(--navy);border:1px solid #dce5f0;padding:8px 11px;border-radius:6px}
+.danger{background:#fff0ef;color:var(--danger);border:1px solid #f0d0cd;padding:8px 11px;border-radius:6px}
+.panel{background:white;border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:18px}
+.panel h3{color:var(--navy);margin-bottom:17px}
+.hidden{display:none!important}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.group{display:flex;flex-direction:column;gap:7px}
+.group.full{grid-column:1/-1}
+label{font-size:13px;font-weight:bold}
+input,select,textarea{
+ width:100%;padding:11px;border:1px solid var(--border);
+ border-radius:7px;background:white;font:inherit;color:var(--text)
+}
+textarea{min-height:90px;resize:vertical;line-height:1.5}
+input:focus,select:focus,textarea:focus{outline:2px solid #e8d5a7;border-color:var(--gold)}
+.hint{font-size:11px;color:var(--muted);line-height:1.4}
+.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}
+.list{display:grid;gap:11px}
+.item{display:flex;align-items:center;gap:13px;padding:14px;border:1px solid var(--border);border-radius:9px;background:white}
+.item-info{flex:1;min-width:0}
+.item-info h4{color:var(--navy);margin-bottom:5px}
+.item-info p{font-size:12px;color:var(--muted);line-height:1.5;margin-top:3px;white-space:pre-line}
+.item-actions{display:flex;gap:7px;flex-wrap:wrap}
+.member-photo,.photo-placeholder{width:65px;height:65px;object-fit:cover;border-radius:50%;background:#edf0f5;flex-shrink:0}
+.photo-preview{width:90px;height:90px;object-fit:cover;border-radius:50%;display:none;margin-top:8px}
+.empty{text-align:center;padding:25px;color:var(--muted);font-size:13px}
+@media(max-width:650px){
+ header{padding:16px}
+ header h1{font-size:16px}
+ main{padding:20px 13px}
+ .form-grid{grid-template-columns:1fr}
+ .group.full{grid-column:auto}
+ .panel{padding:15px}
+ .item{flex-wrap:wrap}
+ .item-actions{width:100%}
+ .item-actions button{flex:1}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div>
+  <h1>BUEP-ENS/PN</h1>
+  <p>Administration du portail institutionnel</p>
+ </div>
+ <a href="gestion.html">← Tableau de bord</a>
+</header>
+
+<main>
+ <section class="intro">
+  <h2>Organigramme du Bureau</h2>
+  <p>Gérez les postes, les responsabilités et les membres du Bureau.</p>
+ </section>
+
+ <div id="feedback" class="feedback" role="alert"></div>
+
+ <nav class="tabs">
+  <button class="tab active" data-tab="positions" type="button">Postes du Bureau</button>
+  <button class="tab" data-tab="members" type="button">Membres du Bureau</button>
+ </nav>
+
+ <!-- POSTES -->
+ <section class="section active" id="positionsSection">
+  <div class="toolbar">
+   <h3>Postes enregistrés</h3>
+   <button class="primary" id="addPosition" type="button">+ Ajouter un poste</button>
+  </div>
+
+  <div class="panel hidden" id="positionFormPanel">
+   <h3 id="positionFormTitle">Ajouter un poste</h3>
+
+   <form id="positionForm">
+    <div class="form-grid">
+     <div class="group">
+      <label for="positionTitle">Intitulé du poste *</label>
+      <input id="positionTitle" required maxlength="150">
+     </div>
+
+     <div class="group">
+      <label for="parentPosition">Poste de rattachement</label>
+      <select id="parentPosition">
+       <option value="">Aucun — Poste principal</option>
+      </select>
+     </div>
+
+     <div class="group full">
+      <label for="positionDescription">Brève description des responsabilités</label>
+      <textarea id="positionDescription" maxlength="1500" placeholder="Présentez brièvement les principales responsabilités de ce poste..."></textarea>
+      <span class="hint">Cette description pourra être affichée sur le site public.</span>
+     </div>
+
+     <div class="group">
+      <label for="positionOrder">Ordre d'affichage</label>
+      <input id="positionOrder" type="number" min="0" value="0">
+     </div>
+    </div>
+
+    <div class="form-actions">
+     <button class="primary" id="savePosition" type="submit">Enregistrer</button>
+     <button class="secondary" id="cancelPosition" type="button">Annuler</button>
+    </div>
+   </form>
+  </div>
+
+  <div class="panel">
+   <div id="positionList" class="list">
+    <div class="empty">Chargement des postes...</div>
+   </div>
+  </div>
+ </section>
+
+ <!-- MEMBRES -->
+ <section class="section" id="membersSection">
+  <div class="toolbar">
+   <h3>Membres enregistrés</h3>
+   <button class="primary" id="addMember" type="button">+ Ajouter un membre</button>
+  </div>
+
+  <div class="panel hidden" id="memberFormPanel">
+   <h3 id="memberFormTitle">Ajouter un membre</h3>
+
+   <form id="memberForm">
+    <div class="form-grid">
+     <div class="group full">
+      <label for="memberName">Nom et prénoms *</label>
+      <input id="memberName" required maxlength="180">
+     </div>
+
+     <div class="group">
+      <label for="memberPosition">Poste occupé *</label>
+      <select id="memberPosition" required>
+       <option value="">Choisir un poste</option>
+      </select>
+     </div>
+
+     <div class="group">
+      <label for="memberMandate">Année du mandat</label>
+      <input id="memberMandate" maxlength="30" placeholder="2026-2027">
+     </div>
+
+     <div class="group full">
+      <label for="memberBiography">Brève présentation du membre</label>
+      <textarea id="memberBiography" maxlength="1500" placeholder="Présentez brièvement le membre, son parcours ou son engagement..."></textarea>
+      <span class="hint">Cette présentation est facultative.</span>
+     </div>
+
+     <div class="group full">
+      <label for="memberPhoto">Photo du membre</label>
+      <input id="memberPhoto" type="file" accept="image/jpeg,image/png,image/webp">
+      <span class="hint">Formats acceptés : JPG, PNG et WebP. Maximum : 10 Mo.</span>
+      <img id="photoPreview" class="photo-preview" alt="Aperçu de la photo">
+     </div>
+    </div>
+
+    <div class="form-actions">
+     <button class="primary" id="saveMember" type="submit">Enregistrer</button>
+     <button class="secondary" id="cancelMember" type="button">Annuler</button>
+    </div>
+   </form>
+  </div>
+
+  <div class="panel">
+   <div id="memberList" class="list">
+    <div class="empty">Chargement des membres...</div>
+   </div>
+  </div>
+ </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/supabase.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+ const db = window.buepSupabase;
+ const feedback = document.getElementById("feedback");
+ const positionList = document.getElementById("positionList");
+ const memberList = document.getElementById("memberList");
+
+ let positions = [];
+ let members = [];
+ let assignments = [];
+ let editingPositionId = null;
+ let editingMemberId = null;
+ let currentPhotoPath = null;
+
+ function notify(message,type="error"){
+  feedback.textContent=message;
+  feedback.className="feedback "+type;
+ }
+
+ function clearNotify(){
+  feedback.textContent="";
+  feedback.className="feedback";
+ }
+
+ function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({
+   "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  })[char]);
+ }
+
+ function photoUrl(path){
+  if(!path)return "";
+  return db.storage.from("buep-public-assets").getPublicUrl(path).data.publicUrl;
+ }
+
+ // NAVIGATION
+ document.querySelectorAll(".tab").forEach(button=>{
+  button.addEventListener("click",()=>{
+   document.querySelectorAll(".tab").forEach(tab=>tab.classList.remove("active"));
+   document.querySelectorAll(".section").forEach(section=>section.classList.remove("active"));
+   button.classList.add("active");
+   document.getElementById(button.dataset.tab+"Section").classList.add("active");
+   clearNotify();
+  });
+ });
+
+ // CHARGEMENT DES DONNÉES
+ async function loadData(){
+  const results=await Promise.all([
+   db.from("organigram_positions")
+    .select("id,parent_position_id,title_fr,description_fr,display_order,is_active")
+    .order("display_order"),
+   db.from("organigram_members")
+    .select("id,full_name,photo_path,biography_fr,mandate_label,display_order,is_visible")
+    .order("display_order"),
+   db.from("organigram_assignments")
+    .select("id,member_id,position_id,is_current,is_visible,display_order")
+    .eq("is_current",true)
+  ]);
+
+  const failed=results.find(result=>result.error);
+  if(failed)throw failed.error;
+
+  positions=results[0].data||[];
+  members=results[1].data||[];
+  assignments=results[2].data||[];
+
+  renderPositions();
+  renderMembers();
+  updatePositionSelects();
+ }
+
+ // LISTES DÉROULANTES
+ function updatePositionSelects(parentSelected="",memberSelected=""){
+  const parentSelect=document.getElementById("parentPosition");
+  const memberSelect=document.getElementById("memberPosition");
+
+  parentSelect.innerHTML='<option value="">Aucun — Poste principal</option>';
+  memberSelect.innerHTML='<option value="">Choisir un poste</option>';
+
+  positions.forEach(position=>{
+   if(position.id!==editingPositionId){
+    const option=document.createElement("option");
+    option.value=position.id;
+    option.textContent=position.title_fr;
+    option.selected=position.id===parentSelected;
+    parentSelect.appendChild(option);
+   }
+
+   if(position.is_active){
+    const option=document.createElement("option");
+    option.value=position.id;
+    option.textContent=position.title_fr;
+    option.selected=position.id===memberSelected;
+    memberSelect.appendChild(option);
+   }
+  });
+ }
+
+ // AFFICHAGE DES POSTES
+ function renderPositions(){
+  if(!positions.length){
+   positionList.innerHTML='<div class="empty">Aucun poste enregistré.</div>';
+   return;
+  }
+
+  positionList.innerHTML=positions.map(position=>{
+   const parent=positions.find(item=>item.id===position.parent_position_id);
+
+   return `
+    <article class="item">
+     <div class="item-info">
+      <h4>${escapeHTML(position.title_fr)}</h4>
+      <p>${parent?"Rattaché à : "+escapeHTML(parent.title_fr):"Poste principal"}</p>
+      ${position.description_fr?`<p>${escapeHTML(position.description_fr)}</p>`:""}
+     </div>
+     <div class="item-actions">
+      <button class="edit" data-edit-position="${position.id}" type="button">Modifier</button>
+      <button class="danger" data-delete-position="${position.id}" type="button">Supprimer</button>
+     </div>
+    </article>`;
+  }).join("");
+
+  positionList.querySelectorAll("[data-edit-position]").forEach(button=>{
+   button.addEventListener("click",()=>editPosition(button.dataset.editPosition));
+  });
+
+  positionList.querySelectorAll("[data-delete-position]").forEach(button=>{
+   button.addEventListener("click",()=>deletePosition(button.dataset.deletePosition));
+  });
+ }
+
+ function editPosition(id){
+  const position=positions.find(item=>item.id===id);
+  if(!position)return;
+
+  editingPositionId=id;
+  document.getElementById("positionFormTitle").textContent="Modifier le poste";
+  document.getElementById("positionTitle").value=position.title_fr||"";
+  document.getElementById("positionDescription").value=position.description_fr||"";
+  document.getElementById("positionOrder").value=position.display_order??0;
+
+  updatePositionSelects(position.parent_position_id||"");
+  document.getElementById("positionFormPanel").classList.remove("hidden");
+  document.getElementById("positionFormPanel").scrollIntoView({behavior:"smooth"});
+ }
+
+ function closePositionForm(){
+  document.getElementById("positionForm").reset();
+  editingPositionId=null;
+  document.getElementById("positionFormPanel").classList.add("hidden");
+  document.getElementById("positionFormTitle").textContent="Ajouter un poste";
+  updatePositionSelects();
+ }
+
+ document.getElementById("addPosition").addEventListener("click",()=>{
+  clearNotify();
+  closePositionForm();
+  document.getElementById("positionFormPanel").classList.remove("hidden");
+  document.getElementById("positionFormPanel").scrollIntoView({behavior:"smooth"});
+ });
+
+ document.getElementById("cancelPosition").addEventListener("click",closePositionForm);
+
+ document.getElementById("positionForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  clearNotify();
+
+  const title=document.getElementById("positionTitle").value.trim();
+  const parentId=document.getElementById("parentPosition").value||null;
+
+  if(!title)return notify("L'intitulé du poste est obligatoire.");
+  if(parentId===editingPositionId)return notify("Un poste ne peut pas être rattaché à lui-même.");
+
+  function createsCycle(candidateId,ancestorId){
+   let current=positions.find(item=>item.id===candidateId);
+   while(current&&current.parent_position_id){
+    if(current.parent_position_id===ancestorId)return true;
+    current=positions.find(item=>item.id===current.parent_position_id);
+   }
+   return false;
+  }
+
+  if(editingPositionId&&parentId&&createsCycle(parentId,editingPositionId)){
+   return notify("Ce rattachement créerait une boucle dans la hiérarchie.");
+  }
+
+  const payload={
+   title_fr:title,
+   description_fr:document.getElementById("positionDescription").value.trim()||null,
+   parent_position_id:parentId,
+   display_order:Number(document.getElementById("positionOrder").value)||0
+  };
+
+  const button=document.getElementById("savePosition");
+  button.disabled=true;
+  button.textContent="Enregistrement...";
+
+  try{
+   const result=editingPositionId
+    ?await db.from("organigram_positions").update(payload).eq("id",editingPositionId)
+    :await db.from("organigram_positions").insert(payload);
+
+   if(result.error)throw result.error;
+
+   notify(editingPositionId?"Poste modifié.":"Poste ajouté.","success");
+   closePositionForm();
+   await loadData();
+  }catch(error){
+   notify("Enregistrement impossible : "+error.message);
+  }finally{
+   button.disabled=false;
+   button.textContent="Enregistrer";
+  }
+ });
+
+ async function deletePosition(id){
+  const position=positions.find(item=>item.id===id);
+  if(!position)return;
+
+  if(positions.some(item=>item.parent_position_id===id)){
+   return notify("Ce poste possède des postes rattachés. Modifiez d'abord leur rattachement.");
+  }
+
+  if(assignments.some(item=>item.position_id===id)){
+   return notify("Ce poste est encore attribué à un membre. Modifiez d'abord son affectation.");
+  }
+
+  if(!confirm("Supprimer le poste « "+position.title_fr+" » ?"))return;
+
+  const {error}=await db.from("organigram_positions").delete().eq("id",id);
+  if(error)return notify("Suppression impossible : "+error.message);
+
+  notify("Poste supprimé.","success");
+  await loadData();
+ }
+
+ // AFFICHAGE DES MEMBRES
+ function renderMembers(){
+  if(!members.length){
+   memberList.innerHTML='<div class="empty">Aucun membre enregistré.</div>';
+   return;
+  }
+
+  memberList.innerHTML=members.map(member=>{
+   const assignment=assignments.find(item=>item.member_id===member.id);
+   const position=positions.find(item=>item.id===assignment?.position_id);
+   const photo=photoUrl(member.photo_path);
+
+   return `
+    <article class="item">
+     ${photo
+      ?`<img class="member-photo" src="${escapeHTML(photo)}" alt="Photo du membre">`
+      :'<div class="photo-placeholder"></div>'}
+     <div class="item-info">
+      <h4>${escapeHTML(member.full_name)}</h4>
+      <p>${escapeHTML(position?.title_fr||"Poste non attribué")}</p>
+      <p>Mandat : ${escapeHTML(member.mandate_label||"Non renseigné")}</p>
+      ${member.biography_fr?`<p>${escapeHTML(member.biography_fr)}</p>`:""}
+     </div>
+     <div class="item-actions">
+      <button class="edit" data-edit-member="${member.id}" type="button">Modifier</button>
+      <button class="danger" data-delete-member="${member.id}" type="button">Supprimer</button>
+     </div>
+    </article>`;
+  }).join("");
+
+  memberList.querySelectorAll("[data-edit-member]").forEach(button=>{
+   button.addEventListener("click",()=>editMember(button.dataset.editMember));
+  });
+
+  memberList.querySelectorAll("[data-delete-member]").forEach(button=>{
+   button.addEventListener("click",()=>deleteMember(button.dataset.deleteMember));
+  });
+ }
+
+ function editMember(id){
+  const member=members.find(item=>item.id===id);
+  if(!member)return;
+
+  const assignment=assignments.find(item=>item.member_id===id);
+  editingMemberId=id;
+  currentPhotoPath=member.photo_path||null;
+
+  document.getElementById("memberFormTitle").textContent="Modifier le membre";
+  document.getElementById("memberName").value=member.full_name||"";
+  document.getElementById("memberMandate").value=member.mandate_label||"";
+  document.getElementById("memberBiography").value=member.biography_fr||"";
+
+  updatePositionSelects("",assignment?.position_id||"");
+
+  const preview=document.getElementById("photoPreview");
+  if(member.photo_path){
+   preview.src=photoUrl(member.photo_path);
+   preview.style.display="block";
+  }else{
+   preview.style.display="none";
+  }
+
+  document.getElementById("memberFormPanel").classList.remove("hidden");
+  document.getElementById("memberFormPanel").scrollIntoView({behavior:"smooth"});
+ }
+
+ function closeMemberForm(){
+  document.getElementById("memberForm").reset();
+  editingMemberId=null;
+  currentPhotoPath=null;
+  document.getElementById("memberFormPanel").classList.add("hidden");
+  document.getElementById("memberFormTitle").textContent="Ajouter un membre";
+  document.getElementById("photoPreview").style.display="none";
+  document.getElementById("photoPreview").src="";
+  updatePositionSelects();
+ }
+
+ document.getElementById("addMember").addEventListener("click",()=>{
+  clearNotify();
+  closeMemberForm();
+  document.getElementById("memberFormPanel").classList.remove("hidden");
+  document.getElementById("memberFormPanel").scrollIntoView({behavior:"smooth"});
+ });
+
+ document.getElementById("cancelMember").addEventListener("click",closeMemberForm);
+
+ // APERÇU DE LA PHOTO
+ document.getElementById("memberPhoto").addEventListener("change",event=>{
+  const file=event.target.files[0];
+  if(!file)return;
+
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+   event.target.value="";
+   return notify("Choisissez une image JPG, PNG ou WebP.");
+  }
+
+  if(file.size>10*1024*1024){
+   event.target.value="";
+   return notify("La photo ne doit pas dépasser 10 Mo.");
+  }
+
+  const preview=document.getElementById("photoPreview");
+  preview.src=URL.createObjectURL(file);
+  preview.style.display="block";
+  clearNotify();
+ });
+
+ // ENVOI DE LA PHOTO
+ async function uploadPhoto(file){
+  if(!file)return currentPhotoPath;
+
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+   throw new Error("Format de photo non accepté.");
+  }
+
+  if(file.size>10*1024*1024){
+   throw new Error("La photo dépasse 10 Mo.");
+  }
+
+  const extension=file.name.split(".").pop().toLowerCase();
+  const path="organigram/"+crypto.randomUUID()+"."+extension;
+
+  const {error}=await db.storage.from("buep-public-assets")
+   .upload(path,file,{contentType:file.type,upsert:false});
+
+  if(error)throw error;
+  return path;
+ }
+
+ // ENREGISTREMENT DU MEMBRE ET DE SON POSTE
+ document.getElementById("memberForm").addEventListener("submit",async event=>{
+  event.preventDefault();
+  clearNotify();
+
+  const fullName=document.getElementById("memberName").value.trim();
+  const positionId=document.getElementById("memberPosition").value;
+
+  if(!fullName||!positionId){
+   return notify("Le nom et le poste sont obligatoires.");
+  }
+
+  const button=document.getElementById("saveMember");
+  button.disabled=true;
+  button.textContent="Enregistrement...";
+
+  try{
+   const photoPath=await uploadPhoto(document.getElementById("memberPhoto").files[0]);
+
+   const payload={
+    full_name:fullName,
+    photo_path:photoPath,
+    biography_fr:document.getElementById("memberBiography").value.trim()||null,
+    mandate_label:document.getElementById("memberMandate").value.trim()||null,
+    is_visible:true
+   };
+
+   let memberId=editingMemberId;
+
+   if(editingMemberId){
+    const {error}=await db.from("organigram_members")
+     .update(payload).eq("id",editingMemberId);
+    if(error)throw error;
+   }else{
+    const {data,error}=await db.from("organigram_members")
+     .insert(payload).select("id").single();
+    if(error)throw error;
+    memberId=data.id;
+   }
+
+   const existing=assignments.find(item=>item.member_id===memberId);
+
+   const assignmentPayload={
+    member_id:memberId,
+    position_id:positionId,
+    is_current:true,
+    is_visible:true,
+    display_order:0
+   };
+
+   if(existing){
+    const {error}=await db.from("organigram_assignments")
+     .update(assignmentPayload).eq("id",existing.id);
+    if(error)throw error;
+   }else{
+    const {error}=await db.from("organigram_assignments")
+     .insert(assignmentPayload);
+    if(error)throw error;
+   }
+
+   notify(editingMemberId?"Membre modifié.":"Membre ajouté.","success");
+   closeMemberForm();
+   await loadData();
+
+  }catch(error){
+   console.error(error);
+   notify("Enregistrement impossible : "+error.message);
+  }finally{
+   button.disabled=false;
+   button.textContent="Enregistrer";
+  }
+ });
+
+ // SUPPRESSION D'UN MEMBRE
+ async function deleteMember(id){
+  const member=members.find(item=>item.id===id);
+  if(!member)return;
+
+  if(!confirm("Supprimer le membre « "+member.full_name+" » ?"))return;
+
+  try{
+   const {error:assignmentError}=await db.from("organigram_assignments")
+    .delete().eq("member_id",id);
+
+   if(assignmentError)throw assignmentError;
+
+   const {error}=await db.from("organigram_members")
+    .delete().eq("id",id);
+
+   if(error)throw error;
+
+   notify("Membre supprimé.","success");
+   await loadData();
+  }catch(error){
+   notify("Suppression impossible : "+error.message);
+  }
+ }
+
+ // AUTHENTIFICATION ET INITIALISATION
+ if(!db){
+  notify("Connexion Supabase indisponible.");
+  return;
+ }
+
+ try{
+  const {data:sessionData,error:sessionError}=await db.auth.getSession();
+  if(sessionError)throw sessionError;
+
+  if(!sessionData.session){
+   window.location.replace("connexion.html");
+   return;
+  }
+
+  const {data:profile,error:profileError}=await db
+   .from("profiles")
+   .select("user_id,account_status")
+   .eq("user_id",sessionData.session.user.id)
+   .maybeSingle();
+
+  if(profileError)throw profileError;
+
+  if(!profile||profile.account_status!=="active"){
+   await db.auth.signOut();
+   window.location.replace("connexion.html");
+   return;
+  }
+
+  await loadData();
+
+ }catch(error){
+  console.error(error);
+  notify("Chargement impossible : "+error.message);
+  positionList.innerHTML='<div class="empty">Impossible de charger les postes.</div>';
+  memberList.innerHTML='<div class="empty">Impossible de charger les membres.</div>';
+ }
+});
+</script>
+
+</body>
+</html>
