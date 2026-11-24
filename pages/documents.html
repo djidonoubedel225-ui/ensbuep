@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#102744">
+    <meta name="description" content="Consultez les documents et ressources publiés par le BUEP-ENS/PN.">
+
+    <title>Documents | BUEP-ENS/PN</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+    <!-- BARRE INSTITUTIONNELLE -->
+    <div class="topbar">
+        <div class="container topbar-content">
+            <p>Université d'Abomey-Calavi · ENS de Porto-Novo</p>
+
+            <div class="topbar-links">
+                <span>Fédération Nationale des Étudiants du Bénin</span>
+                <span>BUEP-ENS/PN</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- EN-TÊTE -->
+    <header class="main-header">
+        <div class="container header-content">
+
+            <a href="../index.html" class="brand">
+                <div class="brand-logo"><span>B</span></div>
+
+                <div class="brand-text">
+                    <strong>BUEP-ENS/PN</strong>
+                    <small>Union · Solidarité · Excellence</small>
+                </div>
+            </a>
+
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Ouvrir le menu"
+                aria-expanded="false"
+                type="button"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <a href="../index.html">Accueil</a>
+                <a href="le-buep.html">Le BUEP</a>
+                <a href="bureau-executif.html">Organigramme du Bureau</a>
+                <a href="actualites.html">Actualités</a>
+                <a href="activites.html">Activités</a>
+                <a href="vie-associative.html">Vie associative</a>
+                <a href="galerie.html">Galerie</a>
+                <a href="documents.html" class="active">Documents</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+
+        <!-- BANNIÈRE -->
+        <section class="page-banner">
+            <div class="container">
+
+                <span class="eyebrow">RESSOURCES ET PUBLICATIONS</span>
+
+                <h1>Documents</h1>
+
+                <p>
+                    Accédez aux documents institutionnels,
+                    aux ressources utiles et aux publications
+                    mises à la disposition de la communauté normalienne.
+                </p>
+
+                <div class="breadcrumb">
+                    <a href="../index.html">Accueil</a>
+                    <span>/</span>
+                    <span>Documents</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- DOCUMENTS -->
+        <section class="section-padding">
+            <div class="container">
+
+                <div class="section-heading">
+                    <span class="eyebrow">ESPACE DOCUMENTAIRE</span>
+
+                    <h2>Nos ressources documentaires</h2>
+
+                    <p>
+                        Retrouvez les documents classés par
+                        catégories pour faciliter leur consultation.
+                    </p>
+                </div>
+
+                <div class="activity-filters" id="documentsFilters" aria-label="Filtrer les documents" hidden></div>
+
+                <div id="documentsContainer" class="documents-grid">
+
+                    <div class="documents-empty">
+                        <div class="empty-icon">✦</div>
+
+                        <h3>Aucun document disponible pour le moment</h3>
+
+                        <p>
+                            Les documents publiés par le BUEP seront
+                            progressivement classés et présentés
+                            dans cet espace.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PIED DE PAGE -->
+    <footer class="main-footer">
+
+        <div class="container footer-grid">
+
+            <div class="footer-brand">
+                <a href="../index.html" class="brand footer-logo">
+                    <div class="brand-logo"><span>B</span></div>
+
+                    <div class="brand-text">
+                        <strong>BUEP-ENS/PN</strong>
+                        <small>Union · Solidarité · Excellence</small>
+                    </div>
+                </a>
+
+                <p>
+                    Le portail institutionnel du Bureau d'Union
+                    des Élèves-Professeurs de l'ENS de Porto-Novo.
+                </p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Navigation</h3>
+                <a href="../index.html">Accueil</a>
+                <a href="le-buep.html">Le BUEP</a>
+                <a href="bureau-executif.html">Organigramme du Bureau</a>
+                <a href="actualites.html">Actualités</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Informations</h3>
+                <a href="documents.html">Documents</a>
+                <a href="galerie.html">Galerie</a>
+                <a href="contact.html">Nous contacter</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <p>
+                    © <span id="currentYear">2026</span>
+                    BUEP-ENS/PN. Tous droits réservés.
+                </p>
+
+                <span>Université d'Abomey-Calavi</span>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- SUPABASE ET APPLICATION -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/supabase.js"></script>
+    <script src="../assets/js/site-settings.js"></script>
+    <script src="../assets/js/site-links.js"></script>
+    <script src="../assets/js/app.js"></script>
+
+</body>
+</html>
