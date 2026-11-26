@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://tvvnzqvbwggqqpkcjzxl.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <meta name="theme-color" content="#102744">
+    <meta name="description" content="Découvrez les activités et projets du BUEP-ENS/PN.">
+
+    <title>Nos activités | BUEP-ENS/PN</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../assets/css/style.css?v=27">
+</head>
+
+<body>
+
+    <!-- BARRE INSTITUTIONNELLE -->
+    <div class="topbar">
+        <div class="container topbar-content">
+            <p>Fédération Nationale des Étudiants du Bénin · ENS de Porto-Novo</p>
+
+            <div class="topbar-links">
+                <span>Union des Élèves-Professeurs de l'École Normale Supérieure</span>
+                <span class="topbar-separator">|</span>
+                <span>BUEP-ENS/PN</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- EN-TÊTE -->
+    <header class="main-header">
+        <div class="container header-content">
+
+            <a href="../index.html" class="brand">
+                <div class="brand-logo"><span>B</span></div>
+
+                <div class="brand-text">
+                    <strong>BUEP-ENS/PN</strong>
+                    <small>Union · Solidarité · Excellence</small>
+                </div>
+            </a>
+
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Ouvrir le menu"
+                aria-expanded="false"
+                type="button"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <a href="../index.html">Accueil</a>
+                <a href="le-buep.html">Le BUEP</a>
+                <a href="bureau-executif.html">Organigramme du Bureau</a>
+                <a href="actualites.html">Actualités</a>
+                <a href="activites.html" class="active">Activités</a>
+                <a href="vie-associative.html">Vie associative</a>
+                <a href="galerie.html">Galerie</a>
+                <a href="documents.html">Documents</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+
+        <!-- BANNIÈRE -->
+        <section class="page-banner">
+            <div class="container">
+
+                <span class="eyebrow">INITIATIVES ET ENGAGEMENTS</span>
+
+                <h1>Nos activités</h1>
+
+                <p>
+                    Découvrez les projets, initiatives et actions
+                    portés par le BUEP pour une Normalie dynamique,
+                    solidaire et engagée.
+                </p>
+
+                <div class="breadcrumb">
+                    <a href="../index.html">Accueil</a>
+                    <span>/</span>
+                    <span>Nos activités</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CONTENU -->
+        <section class="section-padding">
+            <div class="container">
+
+                <div class="section-heading">
+                    <span class="eyebrow">AGIR POUR LA NORMALIE</span>
+
+                    <h2>Nos projets et initiatives</h2>
+                    <div class="gold-line"></div>
+
+                    <p>
+                        Retrouvez les activités organisées ou
+                        accompagnées par le Bureau, ainsi que les
+                        projets destinés à améliorer la vie
+                        académique, sociale et associative.
+                    </p>                </div>
+
+                <div class="activity-filters" aria-label="Filtrer les activités">
+
+                    <div class="activity-filter-group">
+                        <span class="activity-filter-label">Type</span>
+                        <div class="activity-filter-options">
+
+                        <button class="news-filter active" type="button" data-activity-filter="type" data-value="all">Tout</button>
+                        <button class="news-filter" type="button" data-activity-filter="type" data-value="activity">Activités</button>
+                        <button class="news-filter" type="button" data-activity-filter="type" data-value="project">Projets</button>
+                        </div>
+                    </div>
+
+                    <div class="activity-filter-group">
+                        <span class="activity-filter-label">Statut</span>
+                        <div class="activity-filter-options">
+
+                        <button class="news-filter active" type="button" data-activity-filter="status" data-value="all">Tous</button>
+                        <button class="news-filter" type="button" data-activity-filter="status" data-value="upcoming">À venir</button>
+                        <button class="news-filter" type="button" data-activity-filter="status" data-value="ongoing">En cours</button>
+                        <button class="news-filter" type="button" data-activity-filter="status" data-value="done">Achevées</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="activitiesContainer" class="activities-grid">
+
+                    <div class="activities-empty">
+                        <div class="empty-icon">✦</div>
+
+                        <h3>Nos activités seront bientôt présentées</h3>
+
+                        <p>
+                            Les projets et activités du BUEP seront
+                            publiés dans cet espace au fur et à mesure
+                            de leur programmation et de leur réalisation.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PIED DE PAGE -->
+    <footer class="main-footer">
+
+        <div class="container footer-grid">
+
+            <div class="footer-brand">
+                <a href="../index.html" class="brand footer-logo">
+                    <div class="brand-logo"><span>B</span></div>
+
+                    <div class="brand-text">
+                        <strong>BUEP-ENS/PN</strong>
+                        <small>Union · Solidarité · Excellence</small>
+                    </div>
+                </a>
+
+                <p>
+                    Le portail institutionnel du Bureau d'Union
+                    des Élèves-Professeurs de l'ENS de Porto-Novo.
+                </p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Navigation</h3>
+                <a href="../index.html">Accueil</a>
+                <a href="le-buep.html">Le BUEP</a>
+                <a href="bureau-executif.html">Organigramme du Bureau</a>
+                <a href="actualites.html">Actualités</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Informations</h3>
+                <a href="documents.html">Documents</a>
+                <a href="galerie.html">Galerie</a>
+                <a href="contact.html">Nous contacter</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <p>
+                    © <span id="currentYear">2026</span>
+                    BUEP-ENS/PN. Tous droits réservés.
+                </p>
+                <nav class="legal-links" aria-label="Informations légales">
+                    <a href="confidentialite.html">Confidentialité</a>
+                    <a href="cookies.html">Cookies</a>
+                    <a href="conditions.html">Conditions d'utilisation</a>
+                </nav>
+
+                <span>Fédération Nationale des Étudiants du Bénin</span>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/supabase.js"></script>
+    <script src="../assets/js/site-settings.js?v=16"></script>
+    <script src="../assets/js/site-links.js?v=16"></script>
+    <script src="../assets/js/app.js"></script>
+
+</body>
+</html>
