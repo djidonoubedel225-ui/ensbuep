@@ -208,8 +208,11 @@
     }
 
     function isHomePage() {
+        // L'accueil est la racine du site, où qu'elle soit publiée (ex. /ensbuep/),
+        // ou index.html. Les pages des dossiers pages/ et admin/ ne sont pas l'accueil.
         const path = window.location.pathname;
-        return path === "/" || path.endsWith("/index.html") || path.endsWith("index.html");
+        if (/\/(pages|admin)\//.test(path)) return false;
+        return path.endsWith("/") || path.endsWith("/index.html");
     }
 
     function createEl(tag, text, className) {
