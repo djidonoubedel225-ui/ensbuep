@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://tvvnzqvbwggqqpkcjzxl.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <meta name="theme-color" content="#102744">
+    <meta name="description" content="Portail institutionnel du Bureau d'Union des Élèves-Professeurs de l'École Normale Supérieure de Porto-Novo.">
+
+    <title>BUEP-ENS/PN | Portail institutionnel</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="assets/css/style.css?v=27">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- BARRE INSTITUTIONNELLE -->
+    <div class="topbar">
+        <div class="container topbar-content">
+            <p>Fédération Nationale des Étudiants du Bénin · ENS de Porto-Novo</p>
+            <div class="topbar-links">
+                <span>Union des Élèves-Professeurs de l'École Normale Supérieure</span>
+                <span class="topbar-separator">|</span>
+                <span>BUEP-ENS/PN</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- EN-TÊTE PRINCIPAL -->
+    <header class="main-header">
+        <div class="container header-content">
+
+            <a href="index.html" class="brand">
+                <div class="brand-logo">
+                    <span>B</span>
+                </div>
+
+                <div class="brand-text">
+                    <strong>BUEP-ENS/PN</strong>
+                    <small>Union · Solidarité · Excellence</small>
+                </div>
+            </a>
+
+            <button class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Ouvrir le menu"
+                    aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <a href="index.html" class="active">Accueil</a>
+                <a href="pages/le-buep.html">Le BUEP</a>
+                <a href="pages/bureau-executif.html">Organigramme du Bureau</a>
+                <a href="pages/actualites.html">Actualités</a>
+                <a href="pages/activites.html">Activités</a>
+                <a href="pages/vie-associative.html">Vie associative</a>
+                <a href="pages/galerie.html">Galerie</a>
+                <a href="pages/documents.html">Documents</a>
+                <a href="pages/contact.html">Contact</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+
+        <!-- SECTION HERO -->
+        <section class="hero">
+            <div class="hero-overlay"></div>
+
+            <div class="container hero-content">
+                <span class="hero-label">
+                    PORTAIL INSTITUTIONNEL
+                </span>
+
+                <h1 data-db></h1>
+
+                <p data-db></p>
+
+                <div class="hero-actions">
+                    <a href="pages/le-buep.html" class="btn btn-gold">
+                        Découvrir le BUEP
+                    </a>
+
+                    <a href="pages/actualites.html" class="btn btn-outline">
+                        Nos actualités
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MOT DU PRÉSIDENT -->
+        <section class="president-section section-padding">
+            <div class="container president-grid">
+
+                <div class="president-aside">
+                    <div class="section-heading">
+                        <span class="eyebrow">ÉDITORIAL</span>
+                        <h2>Le mot du Président</h2>
+                        <div class="gold-line"></div>
+                    </div>
+
+                    <figure class="president-photo" id="presidentPhotoBox" hidden>
+                        <img id="presidentPhoto" alt="Photo du Président">
+                    </figure>
+                </div>
+
+                <div class="president-content" data-db>
+                    <div class="president-signature">
+                        <strong id="presidentName" data-db></strong>
+                        <span id="presidentRole" data-db></span>
+                        <span class="president-mandate" id="presidentMandate" hidden></span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ACTUALITÉS -->
+        <section class="news-section section-padding">
+            <div class="container">
+
+                <div class="section-top">
+                    <div class="section-heading">
+                        <span class="eyebrow">RESTEZ INFORMÉS</span>
+                        <h2>À la une</h2>
+                    <div class="gold-line"></div>
+                        <p>Les dernières informations de la Normalie.</p>                </div>
+
+                    <a href="pages/actualites.html" class="text-link">
+                        Toutes les actualités →
+                    </a>
+                </div>
+
+                <div class="news-grid" id="newsContainer">
+                    <div class="empty-state">
+                        <span class="empty-icon">✦</span>
+                        <h3>Actualités à venir</h3>
+                        <p>
+                            Les prochaines publications du BUEP
+                            seront présentées dans cet espace.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BLOCS DYNAMIQUES (administration) -->
+        <section class="home-blocks section-padding" id="homeBlocks" hidden></section>
+
+        <!-- ACCÈS RAPIDES -->
+        <section class="quick-section section-padding">
+            <div class="container">
+
+                <div class="section-heading centered">
+                    <span class="eyebrow">EXPLOREZ LE PORTAIL</span>
+                    <h2>La vie normalienne</h2>
+                    <p>Retrouvez les principales rubriques du BUEP.</p>
+                </div>
+
+                <div class="quick-grid">
+
+                    <a href="pages/bureau-executif.html" class="quick-card">
+                        <span class="quick-number">01</span>
+                        <h3>Bureau exécutif</h3>
+                        <p>Découvrez l'équipe dirigeante du BUEP.</p>
+                        <span class="quick-arrow">→</span>
+                    </a>
+
+                    <a href="pages/activites.html" class="quick-card">
+                        <span class="quick-number">02</span>
+                        <h3>Nos activités</h3>
+                        <p>Explorez nos projets et réalisations.</p>
+                        <span class="quick-arrow">→</span>
+                    </a>
+
+                    <a href="pages/vie-associative.html" class="quick-card">
+                        <span class="quick-number">03</span>
+                        <h3>Vie associative</h3>
+                        <p>Découvrez les clubs et associations.</p>
+                        <span class="quick-arrow">→</span>
+                    </a>
+
+                    <a href="pages/documents.html" class="quick-card">
+                        <span class="quick-number">04</span>
+                        <h3>Documents</h3>
+                        <p>Accédez aux ressources institutionnelles.</p>
+                        <span class="quick-arrow">→</span>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PIED DE PAGE -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+
+            <div class="footer-brand">
+                <a href="index.html" class="brand footer-logo">
+                    <div class="brand-logo">
+                        <span>B</span>
+                    </div>
+
+                    <div class="brand-text">
+                        <strong>BUEP-ENS/PN</strong>
+                        <small>Union · Solidarité · Excellence</small>
+                    </div>
+                </a>
+
+                <p>
+                    Le portail institutionnel du Bureau d'Union
+                    des Élèves-Professeurs de l'ENS de Porto-Novo.
+                </p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Navigation</h3>
+                <a href="pages/le-buep.html">Le BUEP</a>
+                <a href="pages/bureau-executif.html">Organigramme du Bureau</a>
+                <a href="pages/actualites.html">Actualités</a>
+                <a href="pages/activites.html">Activités</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Informations</h3>
+                <a href="pages/documents.html">Documents</a>
+                <a href="pages/galerie.html">Galerie</a>
+                <a href="pages/contact.html">Nous contacter</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <p>
+                    © <span id="currentYear">2026</span>
+                    BUEP-ENS/PN. Tous droits réservés.
+                </p>
+                <nav class="legal-links" aria-label="Informations légales">
+                    <a href="pages/confidentialite.html">Confidentialité</a>
+                    <a href="pages/cookies.html">Cookies</a>
+                    <a href="pages/conditions.html">Conditions d'utilisation</a>
+                </nav>
+                <span>Fédération Nationale des Étudiants du Bénin</span>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/supabase.js"></script>
+    <script src="assets/js/site-settings.js?v=16"></script>
+    <script src="assets/js/site-links.js?v=16"></script>
+    <script src="assets/js/app.js"></script>
+
+</body>
+</html>

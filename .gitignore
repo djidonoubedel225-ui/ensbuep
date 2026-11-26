@@ -1,0 +1,38 @@
+# =====================================================
+# Informations de base de données : ne jamais publier
+# =====================================================
+
+# Scripts SQL (fonctions, migrations, requêtes d'administration)
+*.sql
+database/
+db/
+migrations/
+supabase/
+
+# Exports, sauvegardes et dumps
+*.dump
+*.backup
+*.bak
+*.sqlite
+*.db
+*.db-journal
+backup*/
+dump*/
+
+# Fichiers d'environnement et secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+credentials.json
+
+# Fichiers de configuration locaux (copies privées)
+assets/js/config.local.js
+
+# Outils et fichiers temporaires
+.DS_Store
+Thumbs.db
+node_modules/
+*.log
