@@ -1,0 +1,287 @@
+/* Administration : charte du site (bleu marine, or, Playfair + DM Sans).
+   Chargée après le style de chaque page. */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap");
+
+:root {
+    --navy: #0b1f3a;
+    --navy-soft: #16315a;
+    --gold: #d6ad55;
+    --gold-deep: #b88f3a;
+    --gold-soft: #f6ecd6;
+    --light: #f5f3ee;
+    --text: #1d2a3d;
+    --muted: #6b7689;
+    --border: #e7e2d6;
+}
+
+body {
+    font-family: "DM Sans", Arial, sans-serif;
+    background: var(--light);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* En-tête : bandeau marine avec filet doré */
+header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-soft));
+    border-bottom: 3px solid var(--gold);
+    padding: 22px 28px;
+    box-shadow: 0 10px 30px rgba(11, 31, 58, .18);
+}
+
+header h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 22px;
+    letter-spacing: .3px;
+}
+
+header p {
+    color: #c9d3e3;
+    letter-spacing: .2px;
+}
+
+header a {
+    color: var(--gold);
+    border: 1px solid rgba(214, 173, 85, .45);
+    padding: 8px 14px;
+    border-radius: 999px;
+    transition: background .2s ease, color .2s ease;
+}
+
+header a:hover {
+    background: var(--gold);
+    color: var(--navy);
+}
+
+main {
+    max-width: 1080px;
+}
+
+/* Titre de page : eyebrow doré + titre Playfair + filet */
+.intro {
+    margin-bottom: 26px;
+    padding-left: 16px;
+    border-left: 4px solid var(--gold);
+}
+
+.intro h2 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+
+.intro p {
+    font-size: 14px;
+    color: var(--muted);
+}
+
+/* Onglets : pastilles, actif en marine avec filet doré */
+.tabs {
+    gap: 10px;
+    padding: 6px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    display: inline-flex;
+    margin-bottom: 24px;
+}
+
+.tab {
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-weight: 600;
+    background: transparent;
+    color: var(--navy);
+    transition: background .2s ease, color .2s ease;
+}
+
+.tab:hover {
+    background: var(--gold-soft);
+}
+
+.tab.active {
+    background: var(--navy);
+    color: #fff;
+    box-shadow: inset 0 -3px 0 var(--gold);
+}
+
+/* Titres de section */
+.toolbar h3,
+.panel h3 {
+    font-family: "Playfair Display", Georgia, serif;
+    color: var(--navy);
+    font-size: 20px;
+}
+
+.toolbar {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 18px;
+}
+
+/* Cartes */
+.panel {
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--gold);
+    border-radius: 16px;
+    padding: 26px;
+    box-shadow: 0 12px 30px rgba(11, 31, 58, .06);
+}
+
+/* Boutons */
+.primary {
+    background: var(--navy);
+    color: #fff;
+    border: 1px solid var(--navy);
+    border-radius: 999px;
+    padding: 11px 22px;
+    font-weight: 600;
+    letter-spacing: .2px;
+    transition: background .2s ease, color .2s ease, transform .15s ease;
+}
+
+.primary:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+    transform: translateY(-1px);
+}
+
+.secondary {
+    border-radius: 999px;
+    padding: 10px 18px;
+    color: var(--navy);
+    font-weight: 600;
+    transition: border-color .2s ease, background .2s ease;
+}
+
+.secondary:hover {
+    border-color: var(--gold);
+    background: var(--gold-soft);
+}
+
+.edit {
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-weight: 600;
+    background: #fff;
+    border: 1px solid var(--navy);
+    color: var(--navy);
+    transition: background .2s ease, color .2s ease;
+}
+
+.edit:hover {
+    background: var(--navy);
+    color: #fff;
+}
+
+.danger {
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-weight: 600;
+    background: #fff;
+    border: 1px solid #e3b3ae;
+    color: #a52d24;
+    transition: background .2s ease;
+}
+
+.danger:hover {
+    background: #fbe9e7;
+}
+
+/* Champs */
+input, select, textarea {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(214, 173, 85, .2);
+}
+
+label {
+    font-weight: 600;
+    color: var(--navy);
+}
+
+.hint {
+    color: var(--muted);
+}
+
+/* Lignes de liste : photo cerclée d'or, survol dynamique */
+.list {
+    gap: 14px;
+}
+
+.item {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    background: #fff;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(11, 31, 58, .1);
+    border-color: var(--gold);
+}
+
+.item-info h4 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 17px;
+    color: var(--navy);
+}
+
+.item-info p {
+    color: var(--muted);
+}
+
+.member-photo,
+.photo-placeholder,
+.admin-photo {
+    border: 2px solid var(--gold);
+    box-shadow: 0 0 0 4px var(--gold-soft);
+}
+
+.principal-badge,
+.badge {
+    background: var(--gold-soft);
+    color: var(--gold-deep);
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    font-weight: 700;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    font-size: 11px;
+    padding: 4px 10px;
+}
+
+.note {
+    background: var(--gold-soft);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--navy);
+}
+
+/* Messages */
+.feedback {
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.empty {
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    background: #fff;
+    padding: 34px;
+}

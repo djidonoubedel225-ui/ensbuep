@@ -1,0 +1,207 @@
+/* Barre latérale de navigation de l'administration (même modèle que gestion.html).
+   Chargée après admin-site.css. */
+
+.layout {
+    min-height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    width: 260px;
+    background: var(--navy);
+    color: #fff;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    border-right: 3px solid var(--gold);
+    transition: transform .25s ease;
+}
+
+.brand {
+    padding: 24px 20px;
+    border-bottom: 1px solid #ffffff1a;
+}
+
+.brand-name {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.brand-subtitle {
+    color: var(--gold);
+    font-size: 11px;
+    margin-top: 5px;
+    letter-spacing: 1px;
+}
+
+.nav-title {
+    padding: 22px 20px 10px;
+    color: #9baac0;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+
+.navigation {
+    padding: 0 12px;
+    flex: 1 0 auto;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 5px;
+    border-radius: 7px;
+    text-decoration: none;
+    color: #d5ddeb;
+    font-size: 13px;
+    transition: background .2s ease, color .2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: var(--navy-soft);
+    color: #fff;
+}
+
+.nav-link.active {
+    border-left: 3px solid var(--gold);
+}
+
+.nav-icon {
+    width: 22px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.sidebar-bottom {
+    flex-shrink: 0;
+    padding: 15px;
+    border-top: 1px solid #ffffff1a;
+}
+
+.quick-access {
+    margin: 4px 4px 14px;
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .06);
+    border: 1px solid rgba(214, 173, 85, .25);
+}
+
+.quick-access-title {
+    display: block;
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.quick-home {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: filter .2s ease;
+}
+
+.quick-home:hover {
+    filter: brightness(1.08);
+}
+
+.quick-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.quick-links a {
+    text-decoration: none;
+    color: #d5ddeb;
+    font-size: 12px;
+    padding: 7px 8px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, .04);
+    transition: background .2s ease, color .2s ease;
+}
+
+.quick-links a:hover {
+    background: rgba(255, 255, 255, .14);
+    color: #fff;
+}
+
+.back-link {
+    display: block;
+    text-decoration: none;
+    color: #d5ddeb;
+    font-size: 13px;
+    padding: 10px;
+}
+
+.back-link:hover {
+    color: var(--gold);
+}
+
+.main {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    min-height: 100vh;
+    min-width: 0;
+}
+
+.menu-toggle {
+    display: none;
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid rgba(214, 173, 85, .45);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.sidebar-overlay {
+    display: none;
+}
+
+@media (max-width: 850px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .menu-toggle {
+        display: inline-block;
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: #0006;
+        z-index: 15;
+    }
+}

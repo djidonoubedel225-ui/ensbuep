@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1f3a">
+<title>Activation du compte | BUEP-ENS/PN</title>
+<link rel="stylesheet" href="admin-site.css">
+<style>
+body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+.activation { width: 100%; max-width: 440px; background: var(--white, #fff); border: 1px solid var(--border); border-top: 4px solid var(--gold); border-radius: 14px; padding: 30px 28px; box-shadow: 0 18px 40px rgba(11,31,58,.10); }
+.activation h1 { font-family: "Playfair Display", Georgia, serif; font-size: 24px; color: var(--navy); margin-bottom: 6px; }
+.activation p { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+.activation label { display: block; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.activation input { width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px; font: inherit; margin-bottom: 14px; }
+.activation input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.activation button { width: 100%; padding: 12px; border: 0; border-radius: 999px; background: var(--navy); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.activation button:disabled { opacity: .6; cursor: default; }
+.activation .msg { margin-top: 14px; font-size: 14px; color: #b3261e; min-height: 1em; }
+.activation .msg.ok { color: #24713a; }
+.activation .hint { font-size: 12px; color: var(--muted); margin-top: 12px; }
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="activation">
+  <h1>Activer votre accès</h1>
+
+  <div id="checking">
+    <p>Vérification de votre invitation...</p>
+  </div>
+
+  <div id="invalid" class="hidden">
+    <p>Ce lien d'invitation n'est plus valable ou a déjà été utilisé. Demandez à l'administrateur principal de vous envoyer une nouvelle invitation.</p>
+  </div>
+
+  <form id="passwordForm" class="hidden" novalidate>
+    <p>Choisissez un mot de passe pour vous connecter à l'espace d'administration (8 caractères minimum).</p>
+
+    <label for="newPassword">Nouveau mot de passe</label>
+    <input id="newPassword" type="password" autocomplete="new-password" minlength="8" required>
+
+    <label for="confirmPassword">Confirmer le mot de passe</label>
+    <input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required>
+
+    <button id="saveButton" type="submit">Enregistrer et continuer</button>
+    <div id="formMessage" class="msg"></div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/supabase.js"></script>
+<script>
+(function () {
+  const checking = document.getElementById("checking");
+  const invalid = document.getElementById("invalid");
+  const form = document.getElementById("passwordForm");
+  const message = document.getElementById("formMessage");
+  const saveButton = document.getElementById("saveButton");
+
+  function show(which) {
+    checking.classList.toggle("hidden", which !== "checking");
+    invalid.classList.toggle("hidden", which !== "invalid");
+    form.classList.toggle("hidden", which !== "form");
+  }
+
+  if (!window.buepSupabase) {
+    show("invalid");
+    return;
+  }
+
+  const db = window.buepSupabase;
+
+  // Le lien d'invitation transporte la session dans l'adresse : le client Supabase la lit tout seul.
+  // Un lien erroné ou expiré est signalé dans l'adresse elle-même.
+  if (/error_code=|error=/.test(window.location.hash)) {
+    show("invalid");
+    return;
+  }
+
+  let shown = false;
+
+  function openForm() {
+    if (shown) return;
+    shown = true;
+    show("form");
+    document.getElementById("newPassword").focus();
+  }
+
+  db.auth.onAuthStateChange((event, session) => {
+    if (session && (event === "SIGNED_IN" || event === "PASSWORD_RECOVERY" || event === "INITIAL_SESSION")) {
+      openForm();
+    }
+  });
+
+  db.auth.getSession().then(({ data }) => {
+    if (data && data.session) openForm();
+  });
+
+  // Si rien n'arrive au bout de quelques secondes, le lien n'est pas valable.
+  setTimeout(() => {
+    if (!shown) show("invalid");
+  }, 6000);
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    message.className = "msg";
+
+    const password = document.getElementById("newPassword").value;
+    const confirm = document.getElementById("confirmPassword").value;
+
+    if (password.length < 8) {
+      message.textContent = "Le mot de passe doit contenir au moins 8 caractères.";
+      return;
+    }
+    if (password !== confirm) {
+      message.textContent = "Les deux mots de passe ne sont pas identiques.";
+      return;
+    }
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Enregistrement...";
+
+    try {
+      const { data: userData, error: userError } = await db.auth.updateUser({ password });
+      if (userError) throw userError;
+
+      // Le profil doit être actif pour que la connexion à l'administration soit autorisée.
+      const userId = userData?.user?.id;
+      if (userId) {
+        await db.from("profiles").update({ account_status: "active" }).eq("user_id", userId);
+      }
+
+      // On repart d'une session propre : l'administrateur se connecte ensuite avec son nouveau mot de passe.
+      await db.auth.signOut();
+
+      message.classList.add("ok");
+      message.textContent = "Mot de passe enregistré. Redirection vers la connexion...";
+      setTimeout(() => { window.location.href = "connexion.html"; }, 1200);
+    } catch (error) {
+      console.error("Activation du compte :", error);
+      message.textContent = "Enregistrement impossible : " + (error.message || "erreur inconnue.");
+      saveButton.disabled = false;
+      saveButton.textContent = "Enregistrer et continuer";
+    }
+  });
+})();
+</script>
+</body>
+</html>
