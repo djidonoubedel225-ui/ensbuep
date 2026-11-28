@@ -866,6 +866,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return signedData?.signedUrl || "";
         }
 
+        let publicationsLoaded = false;
+
         async function loadPublications() {
 
             newsContainer.innerHTML = `
@@ -916,6 +918,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (error) throw error;
 
                 publications = data || [];
+                publicationsLoaded = true;
 
                 await renderPublications();
 
@@ -933,6 +936,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         async function renderPublications() {
             await window.buepLang.ready;
+
+            // Tant que les données ne sont pas arrivées, seul le message de chargement reste affiché.
+            if (!publicationsLoaded) {
+                showPagedHtml(newsContainer, [], `
+                    <p class="news-empty">
+                        Chargement des actualités...
+                    </p>
+                `);
+                return;
+            }
 
             const filteredPublications = publications.filter(item => {
 
@@ -2237,6 +2250,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
+            galleryContainer.addEventListener("change", event => {
+                const select = event.target.closest("#galleryCategorySelect");
+                if (!select) return;
+
+                galleryActiveFilter = select.value;
+                paintGalleryPage();
+            });
+
             galleryContainer.addEventListener("keydown", event => {
                 const card = event.target.closest("[data-album-id]");
 
@@ -2286,12 +2307,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const filters = categories.size
                 ? `
                     <div class="gallery-filters">
-                        <button type="button" class="gallery-filter active" data-filter="all">Tous</button>
-                        ${[...categories].map(([key, label]) => `
-                            <button type="button" class="gallery-filter" data-filter="${escapeHTML(key)}">
-                                ${escapeHTML(label)}
-                            </button>
-                        `).join("")}
+                        <select id="galleryCategorySelect" class="dynamic-select" aria-label="Filtrer par catégorie">
+                            <option value="all"${galleryActiveFilter === "all" ? " selected" : ""}>Toutes les catégories</option>
+                            ${[...categories].map(([key, label]) => `
+                                <option value="${escapeHTML(key)}"${galleryActiveFilter === key ? " selected" : ""}>${escapeHTML(label)}</option>
+                            `).join("")}
+                        </select>
                     </div>
                 `
                 : "";
@@ -2728,11 +2749,13 @@ document.addEventListener("DOMContentLoaded", () => {
             box.hidden = false;
             box.innerHTML = `
                 <div class="activity-filter-group">
-                    <span class="activity-filter-label">Catégorie</span>
-                    <div class="activity-filter-options">
-                    ${btn("category", "all", "Toutes")}
-                    ${[...categories].map(([key, label]) => btn("category", key, label)).join("")}
-                    </div>
+                    <label class="activity-filter-label" for="documentCategorySelect">Catégorie</label>
+                    <select id="documentCategorySelect" class="dynamic-select">
+                        <option value="all"${documentFilters.category === "all" ? " selected" : ""}>Toutes les catégories</option>
+                        ${[...categories].map(([key, label]) => `
+                            <option value="${escapeHTML(key)}"${documentFilters.category === key ? " selected" : ""}>${escapeHTML(label)}</option>
+                        `).join("")}
+                    </select>
                 </div>
                 <div class="activity-filter-group">
                     <span class="activity-filter-label">Accès</span>
@@ -2743,6 +2766,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </div>
             `;
+
+            box.querySelector("#documentCategorySelect")?.addEventListener("change", event => {
+                documentFilters.category = event.target.value;
+                applyDocumentFilters();
+            });
 
             box.querySelectorAll("[data-doc-filter]").forEach(button => {
                 button.addEventListener("click", () => {
@@ -3146,6 +3174,70 @@ document.addEventListener("DOMContentLoaded", () => {
         const feedback = document.getElementById("contactFeedback");
         const submitButton = contactForm.querySelector('button[type="submit"]');
 
+        // Pièces jointes : PDF ou image, 5 Mo maximum, 3 fichiers au plus
+        const ATTACH_BUCKET = "buep-message-attachments";
+        const ATTACH_MAX_SIZE = 5 * 1024 * 1024;
+        const ATTACH_MAX_COUNT = 3;
+        const ATTACH_EXTENSIONS = {
+            "application/pdf": "pdf",
+            "image/jpeg": "jpg",
+            "image/png": "png",
+            "image/webp": "webp"
+        };
+        const attachInput = document.getElementById("contactFiles");
+        const attachList = document.getElementById("contactFilesList");
+        let selectedFiles = [];
+
+        function newUuid() {
+            if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+            return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+                const r = Math.random() * 16 | 0;
+                return (c === "x" ? r : (r & 0x3 | 0x8)).toString(16);
+            });
+        }
+
+        function renderAttachments() {
+            attachList.innerHTML = selectedFiles.map((file, index) =>
+                `<li>
+                    <span>${escapeHTML(file.name)}</span>
+                    <small>${Math.max(1, Math.round(file.size / 1024))} Ko</small>
+                    <button type="button" class="contact-file-remove" data-file-index="${index}" aria-label="Retirer ${escapeHTML(file.name)}">×</button>
+                </li>`
+            ).join("");
+        }
+
+        if (attachInput) {
+            attachInput.addEventListener("change", () => {
+                const incoming = Array.from(attachInput.files || []);
+                const problems = [];
+
+                incoming.forEach(file => {
+                    if (!ATTACH_EXTENSIONS[file.type]) {
+                        problems.push(`« ${file.name} » : seuls les PDF et les images (JPG, PNG, WebP) sont acceptés.`);
+                    } else if (file.size > ATTACH_MAX_SIZE) {
+                        problems.push(`« ${file.name} » dépasse 5 Mo.`);
+                    } else if (selectedFiles.length >= ATTACH_MAX_COUNT) {
+                        problems.push("Trois fichiers au maximum.");
+                    } else {
+                        selectedFiles.push(file);
+                    }
+                });
+
+                attachInput.value = "";
+                renderAttachments();
+
+                feedback.className = problems.length ? "contact-feedback is-error" : "";
+                feedback.textContent = problems.join(" ");
+            });
+
+            attachList.addEventListener("click", event => {
+                const button = event.target.closest("[data-file-index]");
+                if (!button) return;
+                selectedFiles.splice(Number(button.dataset.fileIndex), 1);
+                renderAttachments();
+            });
+        }
+
         contactForm.addEventListener("submit", async function (event) {
             event.preventDefault();
 
@@ -3163,7 +3255,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const messageBody = document.getElementById("contactMessage").value.trim();
 
             if (!senderName || !senderEmail || !subject || !messageBody) {
-                feedback.textContent = "Veuillez remplir tous les champs.";
+                feedback.textContent = selectedFiles.length
+                    ? "Un fichier ne suffit pas : remplissez votre nom, votre e-mail, le sujet et le message avant d'envoyer."
+                    : "Veuillez remplir tous les champs.";
                 feedback.className = "contact-feedback is-error";
                 return;
             }
@@ -3173,23 +3267,42 @@ document.addEventListener("DOMContentLoaded", () => {
             feedback.textContent = "";
 
             try {
-                const { error } = await supabase
-                    .from("contact_messages")
-                    .insert({
-                        sender_name: senderName,
-                        sender_email: senderEmail,
-                        sender_phone: senderPhone || null,
-                        subject: subject,
-                        message_body: messageBody
-                    });
+                // Les fichiers sont déposés d'abord, puis le message les rattache.
+                const uploaded = [];
+
+                for (const file of selectedFiles) {
+                    const path = `${newUuid()}/${newUuid()}.${ATTACH_EXTENSIONS[file.type]}`;
+                    const { error: uploadError } = await supabase.storage
+                        .from(ATTACH_BUCKET)
+                        .upload(path, file, { contentType: file.type, cacheControl: "3600" });
+
+                    if (uploadError) throw uploadError;
+
+                    uploaded.push({ path, name: file.name, type: file.type, size: file.size });
+                }
+
+                const { data: reference, error } = await supabase.rpc("submit_contact_message", {
+                    p_sender_name: senderName,
+                    p_sender_email: senderEmail,
+                    p_sender_phone: senderPhone || null,
+                    p_subject: subject,
+                    p_message_body: messageBody,
+                    p_attachments: uploaded
+                });
 
                 if (error) {
                     throw error;
                 }
 
                 contactForm.reset();
+                selectedFiles = [];
+                renderAttachments();
                 feedback.className = "contact-feedback is-success";
-                feedback.textContent = "Votre message a bien été envoyé. Merci de nous avoir contactés !";
+                feedback.innerHTML =
+                    "Votre message a bien été envoyé. Merci de nous avoir contactés !<br>" +
+                    "Votre référence : <strong class=\"ref-code\">" + escapeHTML(reference) + "</strong>. " +
+                    "Conservez-la pour suivre votre message sur la page " +
+                    "<a href=\"suivi-message.html?ref=" + encodeURIComponent(reference) + "\">Suivre mon message</a>.";
 
             } catch (error) {
                 console.error("Erreur lors de l'envoi du message :", error);

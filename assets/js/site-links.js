@@ -57,9 +57,34 @@
     1. Menu de navigation (module Navigation)
     ----------------------------------------- */
 
+    const NAV_CACHE_KEY = "buep-nav-cache";
+
+    function readNavCache() {
+        try {
+            return JSON.parse(localStorage.getItem(NAV_CACHE_KEY) || "null");
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function writeNavCache(items) {
+        try {
+            localStorage.setItem(NAV_CACHE_KEY, JSON.stringify(items));
+        } catch (error) {
+            /* Stockage indisponible : pas de cache. */
+        }
+    }
+
     async function buildNavigation() {
         const nav = document.getElementById("mainNav");
         if (!nav) return;
+
+        // Menu déjà connu : affiché tout de suite, sans attendre la base.
+        const cached = readNavCache();
+        if (cached && cached.length) {
+            renderNavigation(nav, cached);
+            if (window.buepReleaseBrand) window.buepReleaseBrand();
+        }
 
         const { data: items, error } = await supabase
             .from("navigation_items")
@@ -68,11 +93,21 @@
             .eq("is_visible", true)
             .order("display_order");
 
-        if (error) throw error;
+        if (error) {
+            if (cached) return;
+            throw error;
+        }
 
         // Sans données, on garde le menu d'origine.
         if (!items || !items.length) return;
 
+        const changed = !cached || JSON.stringify(cached) !== JSON.stringify(items);
+        writeNavCache(items);
+        if (changed) renderNavigation(nav, items);
+        if (window.buepReleaseBrand) window.buepReleaseBrand();
+    }
+
+    function renderNavigation(nav, items) {
         const linkHtml = (item, extraClass = "") => {
             const href = resolveHref(item.url);
             const target = item.open_in_new_tab ? ' target="_blank" rel="noopener"' : "";
@@ -109,6 +144,7 @@
 
         if (html.trim()) {
             nav.innerHTML = html;
+            nav.classList.add("nav-ready");
         }
     }
 
@@ -353,12 +389,15 @@
             console.error("Raccourci administration indisponible :", error);
         }
 
-        run("navigation", buildNavigation);
+        // Menu fixe : il reste tel qu'écrit dans le HTML de chaque page (aucun rechargement depuis la base).
         run("blocs d'accueil", buildHomeBlocks);
         run("coordonnées", buildContacts);
     }
 
-    if (document.readyState === "loading") {
+    // Scripts en fin de page : le menu est là, on le remplit tout de suite depuis le cache.
+    if (document.getElementById("mainNav") || document.readyState !== "loading") {
+        start();
+    } else if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", start);
     } else {
         start();

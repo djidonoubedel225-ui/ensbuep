@@ -11,6 +11,7 @@
 
     const supabase = window.buepSupabase;
     const PUBLIC_BUCKET = "buep-public-assets";
+    const SETTINGS_CACHE_KEY = "buep-settings-cache";
 
     if (!supabase) return;
 
@@ -55,6 +56,44 @@
         }
     }
 
+    // Réduit le logo à 400 px au plus (PNG) : il reste net sur l'écran de chargement
+    // et l'en-tête, et se lit immédiatement, même quand le fichier d'origine est lourd.
+    async function shrinkLogo(blob) {
+        try {
+            const bitmap = await createImageBitmap(blob);
+            const scale = Math.min(1, 400 / Math.max(bitmap.width, bitmap.height));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+            canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+            canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+            const data = canvas.toDataURL("image/png");
+            return data.length <= 400000 ? data : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    // Copie l'image du logo dans le navigateur (une seule fois par logo).
+    // Les pages suivantes l'affichent sans la retélécharger.
+    async function ensureLogoData(url, alt) {
+        const cached = readLogoCache();
+        if (cached && cached.url === url && cached.data) return;
+
+        try {
+            const response = await fetch(url, { cache: "force-cache" });
+            if (!response.ok) return;
+            const blob = await response.blob();
+            const data = await shrinkLogo(blob);
+            if (!data) {
+                writeLogoCache({ url, alt });
+                return;
+            }
+            writeLogoCache({ url, alt, data });
+        } catch (error) {
+            /* Pas de copie : le logo reste chargé depuis son adresse. */
+        }
+    }
+
     function setBrandLogo(url, alt) {
         document.querySelectorAll(".brand-logo").forEach(box => {
             box.classList.remove("is-pending");
@@ -76,8 +115,9 @@
 
     const cachedLogo = readLogoCache();
 
-    if (cachedLogo && cachedLogo.url) {
-        setBrandLogo(cachedLogo.url, cachedLogo.alt);
+    if (cachedLogo && (cachedLogo.data || cachedLogo.url)) {
+        // L'image enregistrée dans le navigateur s'affiche sans téléchargement.
+        setBrandLogo(cachedLogo.data || cachedLogo.url, cachedLogo.alt);
     } else {
         document.querySelectorAll(".brand-logo").forEach(box => {
             box.classList.add("is-pending");
@@ -100,12 +140,37 @@
         }
     });
 
+    // Identité (sigle, devise) de l'en-tête et du pied de page : appliquée
+    // tout de suite depuis le cache, avant même la réponse de la base.
+    function applyCachedIdentity() {
+        const cached = readSettingsCache();
+
+        if (cached && cached.institution_identity) {
+            try {
+                applyInstitutionIdentity(cached.institution_identity);
+            } catch (error) {
+                console.error("Identité en cache non appliquée :", error);
+            }
+        }
+    }
+
+    // Le script est en fin de page : l'en-tête existe déjà, on applique tout de suite.
+    applyCachedIdentity();
+
+    // Loupe de recherche : créée tout de suite, avant toute donnée (en-tête figé).
+    try { addSearch(); } catch (error) { console.error("Loupe indisponible :", error); }
+
     window.buepDisplayReady = supabase
         .from("navigation_settings")
         .select("setting_value")
         .eq("setting_key", "display")
         .maybeSingle()
-        .then(result => result, () => ({ data: null }));
+        .then(result => {
+            try {
+                if (result && result.data) localStorage.setItem("buep-display-cache", JSON.stringify(result.data));
+            } catch (error) { /* pas de cache */ }
+            return result;
+        }, () => ({ data: null }));
 
     /* -----------------------------------------
     Langue : français par défaut, anglais si la version anglaise
@@ -222,6 +287,32 @@
         return el;
     }
 
+    // Cache du navigateur : les réglages reçus une fois servent aux pages suivantes,
+    // dès l'ouverture, sans afficher de texte d'attente.
+    function readSettingsCache() {
+        try {
+            return JSON.parse(localStorage.getItem(SETTINGS_CACHE_KEY) || "null");
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function writeSettingsCache(settings) {
+        try {
+            const text = JSON.stringify(settings);
+            if (text.length < 900000) localStorage.setItem(SETTINGS_CACHE_KEY, text);
+        } catch (error) {
+            /* Stockage indisponible : le site fonctionne sans cache. */
+        }
+    }
+
+    // Retire l'état d'attente de la marque, du menu et du pied de page.
+    function releaseBrand() {
+        document.documentElement.classList.remove("brand-pending");
+    }
+
+    window.buepReleaseBrand = releaseBrand;
+
     async function loadSettings() {
         const { data, error } = await supabase
             .from("site_settings")
@@ -229,9 +320,12 @@
 
         if (error) throw error;
 
-        return Object.fromEntries(
+        const settings = Object.fromEntries(
             (data || []).map(row => [row.setting_key, row.setting_value || {}])
         );
+
+        writeSettingsCache(settings);
+        return settings;
     }
 
     /* -----------------------------------------
@@ -279,17 +373,7 @@
     ----------------------------------------- */
 
     function applyInstitutionIdentity(institution) {
-        const brandName = document.querySelector(".brand-text strong");
-        const brandMotto = document.querySelector(".brand-text small");
-
-        if (brandName && institution.acronym) {
-            brandName.textContent = institution.acronym;
-        }
-
-        if (brandMotto && institution.motto) {
-            brandMotto.textContent = institution.motto;
-            if (window.buepFitTaglines) window.buepFitTaglines();
-        }
+        // En-tête et pied de page : nom et devise écrits en dur, jamais réécrits depuis la base.
 
         // Devise affichée sur la page « Le BUEP »
         const mottoBox = document.querySelector("[data-motto]");
@@ -759,9 +843,11 @@
 
     function addSearch() {
         const header = document.querySelector(".header-content");
-        if (!header || header.querySelector(".search-toggle")) return;
+        if (!header || document.querySelector(".search-overlay")) return;
 
-        const toggle = createEl("button", "", "search-toggle");
+        // Loupe présente dans le HTML de la page : on la garde telle quelle, sans rien insérer.
+        const staticToggle = header.querySelector(".search-toggle");
+        const toggle = staticToggle || createEl("button", "", "search-toggle");
         toggle.type = "button";
         toggle.setAttribute("aria-label", "Rechercher sur le site");
         toggle.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
@@ -849,7 +935,7 @@
             if (event.key === "Escape" && !overlay.hidden) close();
         });
 
-        header.insertBefore(toggle, header.querySelector(".lang-switch") || header.querySelector(".menu-toggle"));
+        if (!staticToggle) header.insertBefore(toggle, header.querySelector(".menu-toggle"));
         document.body.append(overlay);
     }
 
@@ -880,6 +966,7 @@
         if (!settings) {
             resolveLangReady();
             hideEmptyDataBlocks();
+            releaseBrand();
             return;
         }
 
@@ -902,8 +989,8 @@
             // Réglage illisible : les valeurs par défaut restent affichées.
         }
 
-        if (englishOn && display.show_language_switch) addLanguageSwitch(lang);
-        if (display.show_search) addSearch();
+        // En-tête figé : ni bascule de langue ni loupe ajoutées après coup.
+        addSearch();
 
         if (lang === "en") {
             settings = englishView(settings);
@@ -932,8 +1019,10 @@
             const logo = publicUrl(branding.logo_path);
 
             if (logo) {
-                setBrandLogo(logo, branding.logo_alt);
-                writeLogoCache({ url: logo, alt: branding.logo_alt || "" });
+                const cached = readLogoCache();
+                const sameLogo = cached && cached.url === logo && cached.data;
+                if (!sameLogo) setBrandLogo(logo, branding.logo_alt);
+                ensureLogoData(logo, branding.logo_alt || "");
             } else {
                 setBrandLogo("");
                 writeLogoCache(null);
@@ -977,12 +1066,23 @@
         });
 
         hideEmptyDataBlocks();
+        releaseBrand();
     }
 
     if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", applySiteSettings);
     } else {
         applySiteSettings();
+    }
+
+    // La loupe de recherche est présente dès l'ouverture (réglage mémorisé),
+    // sans attendre la base. Elle n'est jamais retirée ensuite.
+    try {
+        const cachedDisplay = JSON.parse(localStorage.getItem("buep-display-cache") || "null");
+        const showSearch = !(cachedDisplay && cachedDisplay.show_search === false);
+        addSearch();
+    } catch (error) {
+        addSearch();
     }
 })();
 
@@ -1027,8 +1127,7 @@
 
     let frame = 0;
     function scheduleFit() {
-        cancelAnimationFrame(frame);
-        frame = requestAnimationFrame(fitAll);
+        /* Tailles figées dans la feuille de style : aucun ajustement après le chargement. */
     }
 
     window.buepFitTaglines = scheduleFit;
@@ -1040,4 +1139,6 @@
     window.addEventListener("load", scheduleFit);
     window.addEventListener("resize", scheduleFit);
     window.addEventListener("pageshow", scheduleFit);
+
+
 })();
