@@ -10,11 +10,17 @@
 
     <title>Politique de cookies | BUEP-ENS/PN</title>
 
+
+    <script>try{var l=JSON.parse(localStorage.getItem("buep-logo-cache")||"null");if(l&&l.data){document.documentElement.style.setProperty("--buep-logo","url(\""+l.data+"\")");document.documentElement.classList.add("logo-cached")}}catch(e){}</script>
+    <link rel="stylesheet" href="../assets/css/style.css?v=137">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="../assets/css/style.css?v=27">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=optional" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=optional"></noscript>
+    <link rel="manifest" href="../manifest.webmanifest?v=131">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="BUEP">
 </head>
 
 <body>
@@ -34,13 +40,14 @@
         <div class="container header-content">
 
             <a href="../index.html" class="brand">
-                <div class="brand-logo"><span>B</span></div>
+                <div class="brand-logo"></div>
                 <div class="brand-text">
-                    <strong>BUEP-ENS/PN</strong>
-                    <small>Union · Solidarité · Excellence</small>
+                    <strong class="wm" aria-label="LE BUEP"><span>L</span><span>E</span><span class="wm-sp"></span><span>B</span><span>U</span><span>E</span><span>P</span></strong>
+                    <small>Travail · Solidarité · Excellence</small>
                 </div>
             </a>
 
+            <button type="button" class="search-toggle" aria-label="Rechercher sur le site"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
             <button class="menu-toggle"
                     id="menuToggle"
                     aria-label="Ouvrir le menu"
@@ -68,7 +75,7 @@
         <section class="page-banner">
             <div class="container">
                 <span class="eyebrow">INFORMATIONS LÉGALES</span>
-                <h1>Politique de cookies</h1>
+                <h1>POLITIQUE DE COOKIES</h1>
                 <p>Les éléments enregistrés par votre navigateur lorsque vous consultez le portail.</p>
 
                 <div class="breadcrumb">
@@ -80,17 +87,39 @@
         </section>
 
         <section class="section-padding">
-            <div class="container legal-content">
+            <div class="container legal-content"><h2>1. Ce que le portail garde dans votre navigateur</h2>
+                <p>Le portail n'affiche aucune publicité. Il garde quelques informations pratiques, pour que la page s'affiche plus vite et que vous retrouviez vos choix lors de votre prochaine visite. Il mesure aussi, de façon anonyme, la manière dont le portail est utilisé, afin de l'améliorer.</p>
 
-                <h2>Ce que le portail enregistre</h2>
-                <p>Le portail n'utilise ni cookies publicitaires, ni outils de mesure d'audience tiers. Il n'enregistre dans votre navigateur que des éléments techniques :</p>
+                <h2>2. Détail</h2>
                 <ul>
-                    <li><strong>La langue choisie</strong> (français ou anglais), pour conserver votre préférence d'une visite à l'autre.</li>
-                    <li><strong>Le logo du BUEP</strong>, mémorisé pour s'afficher immédiatement lors de votre prochaine visite.</li>
+                    <li><strong>La langue choisie</strong> : français ou anglais, pour la visite suivante.</li>
+                    <li><strong>Le logo et l'identité du BUEP</strong> : pour afficher le logo immédiatement, sans attendre.</li>
+                    <li><strong>Le menu et les réglages d'affichage</strong> : pour retrouver la même présentation d'une visite à l'autre.</li>
+                    <li><strong>L'écran d'accueil</strong> : l'écran de chargement n'est montré qu'une fois par visite du site. Il ne revient pas à chaque page.</li>
+                    <li><strong>La connexion de l'équipe du Bureau</strong> : les membres du Bureau qui ont un compte restent connectés à l'espace d'administration jusqu'à leur déconnexion.</li>
+                    <li><strong>Un identifiant de visite anonyme</strong> : un numéro aléatoire, sans lien avec votre identité. Il permet de savoir si une même visite revient sur le portail, sans jamais savoir qui vous êtes.</li>
+                </ul>
+                <p>Ces informations ne servent ni à vous identifier pour de la publicité, ni à suivre votre navigation sur d'autres sites.</p>
+
+                <h2>3. Services extérieurs</h2>
+                <ul>
+                    <li><strong>Google</strong> : la police d'écriture du portail est chargée depuis Google. Votre adresse IP est alors transmise à Google, comme pour la plupart des sites.</li>
+                    <li><strong>Un service extérieur</strong> : une bibliothèque nécessaire au fonctionnement du portail est chargée depuis ce service.</li>
+                    <li><strong>Les réseaux sociaux</strong> : les boutons de partage et les icônes du pied de page ne transmettent rien tant que vous ne cliquez pas dessus. Après un clic, vous quittez le portail et les règles du réseau concerné s'appliquent.</li>
                 </ul>
 
-                <h2>Durée et suppression</h2>
-                <p>Ces éléments restent dans votre navigateur jusqu'à leur suppression. Vous pouvez les effacer à tout moment depuis les paramètres de votre navigateur, sans que le fonctionnement du portail en soit affecté.</p>
+                <h2>4. Ajout à l'écran d'accueil de votre téléphone</h2>
+                <p>Lorsque vous ajoutez le portail à l'écran d'accueil de votre téléphone, aucune page n'est conservée pour être lue hors connexion, et aucune donnée personnelle n'est collectée à cette occasion.</p>
+
+                <h2>5. Gérer ces informations</h2>
+                <p>Vous pouvez les effacer à tout moment depuis les paramètres de votre navigateur. La consultation du portail n'en est pas affectée : les informations sont simplement recréées lors de votre prochaine visite. Pour l'espace réservé au Bureau, effacer ces informations oblige seulement à se reconnecter.</p>
+                <p>Si vous ne souhaitez pas être compté dans les statistiques, activez la demande de ne pas être suivi dans votre navigateur : le portail la respecte.</p>
+                <p>Si votre navigateur refuse de garder ces informations, certaines fonctions, comme l'espace réservé au Bureau et l'envoi du formulaire de contact, peuvent ne pas fonctionner correctement.</p>
+
+                <h2>6. Mise à jour</h2>
+                <p>Cette page peut être modifiée si le portail évolue. La version affichée fait foi.</p>
+
+
 
             </div>
         </section>
@@ -102,10 +131,10 @@
 
             <div class="footer-brand">
                 <a href="../index.html" class="brand footer-logo">
-                    <div class="brand-logo"><span>B</span></div>
+                    <div class="brand-logo"></div>
                     <div class="brand-text">
-                        <strong>BUEP-ENS/PN</strong>
-                        <small>Union · Solidarité · Excellence</small>
+                        <strong class="wm" aria-label="LE BUEP"><span>L</span><span>E</span><span class="wm-sp"></span><span>B</span><span>U</span><span>E</span><span>P</span></strong>
+                        <small>Travail · Solidarité · Excellence</small>
                     </div>
                 </a>
 
@@ -145,12 +174,16 @@
         </div>
     </footer>
 
+    <script>try{var mc=JSON.parse(localStorage.getItem("buep-settings-cache")||"null");var mm=mc&&mc.institution_identity&&String(mc.institution_identity.motto||"").trim();if(mm){document.querySelectorAll("[data-motto]").forEach(function(e){e.textContent=mm;e.hidden=false})}}catch(e){}</script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../assets/js/config.js"></script>
     <script src="../assets/js/supabase.js"></script>
-    <script src="../assets/js/site-settings.js?v=16"></script>
-    <script src="../assets/js/site-links.js?v=16"></script>
-    <script src="../assets/js/app.js"></script>
+    <script src="../assets/js/tracking.js?v=1"></script>
+        <script src="../assets/js/site-settings.js?v=39"></script>
+    <script src="../assets/js/site-links.js?v=80"></script>
+    <script src="../assets/js/app.js?v=115"></script>
 
+<script src="../assets/js/fluid.js" defer></script>
+<script src="../assets/js/install.js" defer></script>
 </body>
 </html>
