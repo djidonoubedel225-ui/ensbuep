@@ -1,4 +1,20 @@
 
+/* Police de secours de même gabarit que Plus Jakarta Sans : le passage de l'une à l'autre se voit à peine. */
+@font-face {
+    font-family: "Jakarta Fallback";
+    src: local("Arial"), local("Helvetica");
+    size-adjust: 104%;
+    ascent-override: 96%;
+    descent-override: 26%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "BUEP-Digits";
+    src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"), local("Times");
+    unicode-range: U+0030-0039;
+    font-display: swap;
+}
 /* =========================================
    BUEP-ENS/PN — IDENTITÉ VISUELLE
    ========================================= */
@@ -15,8 +31,8 @@
     --muted: #748091;
     --border: #e7e9ed;
 
-    --font-main: 'DM Sans', sans-serif;
-    --font-title: 'Playfair Display', serif;
+    --font-main: "BUEP-Digits", 'DM Sans', sans-serif;
+    --font-title: "BUEP-Digits", 'Playfair Display', serif;
 
     --container: 1160px;
     --shadow: 0 12px 35px rgba(16, 39, 68, .08);
@@ -118,14 +134,14 @@ img {
     flex-shrink: 0;
 }
 
+/* Pastille du logo : vide tant que le logo n'est pas chargé, aucune lettre de remplacement. */
 .brand-logo {
     width: 48px;
     height: 48px;
     display: grid;
     place-items: center;
-    background: var(--navy);
-    color: var(--gold-light);
-    border: 2px solid var(--gold);
+    background: transparent;
+    border: 0;
     border-radius: 50%;
     overflow: hidden;
     font-family: var(--font-title);
@@ -141,6 +157,27 @@ img {
 
 .brand-logo.has-logo {
     background: #ffffff;
+    border: 2px solid var(--gold);
+}
+
+/* Logo déjà enregistré dans le navigateur : affiché dès l'en-tête, sans attente. */
+.logo-cached .brand-logo {
+    background-color: #ffffff;
+    background-image: var(--buep-logo);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+    border: 2px solid var(--gold);
+}
+
+/* Logo par défaut : visible dès le premier affichage, avant même la réponse de la base. */
+.brand-logo:not(.has-logo) {
+    background-color: #ffffff;
+    background-image: url("../img/logo-buep.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80%;
+    border: 2px solid var(--gold);
 }
 
 .brand-logo img {
@@ -5892,10 +5929,6 @@ body.is-leaving > main {
         gap: 18px;
     }
 
-    .main-header .brand-text small {
-        display: none;
-    }
-
     .main-nav {
         gap: 12px;
     }
@@ -5905,11 +5938,6 @@ body.is-leaving > main {
     }
 }
 
-@media (min-width: 781px) and (max-width: 860px) {
-    .main-header .brand-text {
-        display: none;
-    }
-}
 
 @media (min-width: 781px) and (max-width: 1000px) {
     .header-content {
@@ -6338,4 +6366,443 @@ body.is-leaving > main {
     background: #fff;
     color: var(--navy) !important;
     font-size: 13px;
+}
+
+/* Bouton « Suivre mon message » à côté de l'envoi */
+/* Pièces jointes du formulaire de contact */
+.contact-files {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+}
+
+.contact-files li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--border, #e5e0d3);
+    border-radius: 8px;
+    font-size: .9rem;
+}
+
+.contact-files li span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.contact-files li small {
+    color: var(--muted, #6b7689);
+    white-space: nowrap;
+}
+
+.contact-file-remove {
+    border: 0;
+    background: transparent;
+    color: var(--navy, #0b1f3a);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+.field-hint {
+    font-weight: 400;
+    color: var(--muted, #6b7689);
+    font-size: .85rem;
+}
+
+/* Boutons « Envoyer » et « Suivre mon message » : même taille, côte à côte sur PC, empilés et pleine largeur sur mobile */
+.contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: stretch;
+}
+
+.contact-actions .btn-primary,
+.contact-actions .btn-track {
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: auto;
+    width: auto;
+    min-width: 240px;
+    height: 52px;
+    margin: 0;
+    padding: 0 30px;
+    border-radius: 10px;
+    font-size: .92rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.contact-actions .btn-track {
+    background: transparent;
+    border: 2px solid var(--navy, #0b1f3a);
+    color: var(--navy, #0b1f3a);
+}
+
+.contact-actions .btn-track:hover {
+    background: var(--navy, #0b1f3a);
+    color: #fff;
+}
+
+@media (max-width: 640px) {
+    .contact-actions {
+        flex-direction: column;
+    }
+
+    .contact-actions .btn-primary,
+    .contact-actions .btn-track {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* Codes et numéros : zéro barré (0 ≠ O), chiffres alignés */
+.ref-code, .track-code, input[type="number"] {
+    font-family: "BUEP-Digits", 'Inter', sans-serif;
+    font-feature-settings: "zero" 1, "tnum" 1;
+    letter-spacing: .04em;
+}
+
+/* Chiffres en Times New Roman partout ; les champs reprennent la police de leur zone */
+input, select, textarea, button { font-family: inherit; }
+
+/* Chiffres : police système Times New Roman (script digits.js) */
+.digits {
+    font-family: "Times New Roman", Times, "Liberation Serif", serif;
+    font-variant-numeric: lining-nums;
+}
+
+
+
+/* Saisie : Atkinson Hyperlegible (prioritaire sur les règles des formulaires) */
+input, select, textarea, input[type="number"], input[type="text"], input[type="email"], input[type="tel"], input[type="search"] {
+    font-family: "Atkinson Hyperlegible", Arial, sans-serif !important;
+}
+
+/* Références et codes : IBM Plex Mono */
+.ref-code, .track-code, input.ref-code, .ref-code .digits {
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace !important;
+}
+
+/* =========================================
+   FORÇAGE DES BOUTONS ET CHAMPS DU CONTACT ET DU SUIVI
+   PC : boutons côte à côte, même largeur.
+   Mobile (moins de 760 px) : boutons empilés, pleine largeur du formulaire.
+   Suivi : le champ de référence et le bouton ont la même largeur.
+   ========================================= */
+.contact-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+}
+
+.contact-actions .btn-primary,
+.contact-actions .btn-track {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    align-self: stretch !important;
+    justify-self: stretch;
+    box-sizing: border-box;
+}
+
+@media (max-width: 759px) {
+    .contact-actions {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+#trackForm #trackReference,
+#trackForm #trackButton {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box;
+    align-self: stretch !important;
+    margin: 0 !important;
+}
+
+/* =========================================
+   FORÇAGE DU PIED DE PAGE SUR MOBILE
+   Navigation et informations côte à côte, sous le bloc de marque.
+   ========================================= */
+@media (max-width: 759px) {
+    .main-footer .footer-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 22px 16px !important;
+        padding-bottom: 24px !important;
+    }
+
+    .main-footer .footer-brand {
+        grid-column: 1 / -1 !important;
+    }
+
+    .main-footer .footer-brand > p {
+        margin-top: 12px;
+    }
+
+    .main-footer .footer-column {
+        gap: 6px !important;
+    }
+
+    .main-footer .footer-column h3 {
+        margin-bottom: 4px;
+    }
+
+    .main-footer .footer-column a {
+        font-size: 12px;
+    }
+
+    .main-footer .footer-bottom {
+        padding: 12px 0;
+    }
+
+    .main-footer .footer-bottom .container {
+        gap: 8px;
+    }
+}
+
+/* Attente des réglages : la marque, le menu et le pied de page restent masqués
+   jusqu'à être remplis avec les données (cache ou base). Aucun texte d'attente n'est visible. */
+html.brand-pending .brand-text,
+html.brand-pending .main-footer {
+    visibility: hidden;
+}
+
+/* =========================================
+   POLICE UNIQUE DU SITE ET DE L'ADMINISTRATION : PLUS JAKARTA SANS
+   Une seule famille, déjà disponible sur l'appareil : aucun
+   changement de police à l'affichage, y compris les chiffres,
+   les champs et les références.
+   ========================================= */
+html body,
+html body *,
+html body *::before,
+html body *::after,
+.digits,
+.ref-code,
+.ref-code *,
+.track-code,
+input.ref-code,
+.ref-code .digits {
+    font-family: "Plus Jakarta Sans", "Jakarta Fallback", Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+}
+
+/* Sigle et devise : tailles figées, aucun changement après le chargement. */
+.brand-text strong {
+    font-size: 22px !important;
+}
+
+.brand-text small {
+    font-size: 11px !important;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 759px) {
+    .brand-text strong {
+        font-size: 20px !important;
+    }
+
+    .brand-text small {
+        font-size: 10px !important;
+    }
+}
+
+/* Titres des bandeaux bleus : tous en grandes capitales, comme l'organigramme. */
+.page-banner h1 {
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+
+
+
+/* v74 : espacements resserrés (bandeau bleu, en-tête, pied de page). Mise en page stable. */
+.page-banner { padding: 52px 0 42px; }
+.header-content { min-height: 74px; }
+.main-footer { padding-top: 44px; }
+.footer-grid { gap: 44px; padding-bottom: 34px; }
+.footer-bottom { padding: 14px 0; }
+@media (max-width: 780px) {
+    .page-banner { padding: 40px 0 32px; }
+}
+
+.legal-note { padding: 12px 16px; border-left: 3px solid var(--gold, #d6ad55); background: rgba(214,173,85,.12); border-radius: 4px; }
+
+/* v75 : accueil, hauteur selon le contenu (plus de bloc vide imposé) */
+.hero { min-height: 0 !important; }
+.hero-content { padding-top: 56px !important; padding-bottom: 60px !important; }
+.hero h1 { margin: 18px 0; }
+.hero-actions { margin-top: 26px; }
+@media (max-width: 759px) {
+    .hero-content { padding-top: 40px !important; padding-bottom: 44px !important; }
+    .hero h1 { margin: 14px 0; }
+    .hero-actions { margin-top: 22px; }
+}
+
+/* v76 : espace entre les mots plus marqué, pour une lecture plus claire */
+html body, html body * {
+    word-spacing: .14em;
+}
+
+/* v83 : nom « LE BUEP » plus grand, étiré pour couvrir toute la largeur de la devise */
+.brand-text { width: max-content; }
+.brand-text strong {
+    font-size: 26px !important;
+    width: 100%;
+    letter-spacing: 0 !important;
+    display: flex !important;
+    justify-content: space-between;
+    white-space: nowrap;
+}
+.brand-text strong .wm-sp { width: .3em; }
+.brand-text small {
+    display: block;
+    width: 100%;
+    max-width: none !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap;
+    text-align: justify;
+    text-align-last: justify;
+}
+@media (max-width: 759px) {
+    .brand-text strong { font-size: 22px !important; }
+}
+
+/* v87 : la devise reste visible à toutes les largeurs de l'en-tête */
+.main-header .brand-text,
+.main-header .brand-text small {
+    display: block !important;
+}
+
+/* v110 : en-tête immobile. Aucun décalage au chargement, à la navigation ni au défilement. */
+html { scrollbar-gutter: stable; }
+.main-header .header-content { height: 74px; min-height: 74px; max-height: 74px; }
+.main-header .brand-logo,
+.main-header .brand-logo.has-logo,
+.main-header .brand-logo.logo-cached {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px;
+    flex: 0 0 48px;
+    box-sizing: border-box;
+}
+.main-header .brand { flex: 0 0 auto; }
+.main-header .brand-text strong,
+.main-header .brand-text small,
+.main-header .main-nav a,
+.main-header .search-toggle,
+.main-header .menu-toggle { white-space: nowrap; flex-shrink: 0; }
+
+/* v120 : en-tête mobile sans débordement. Les boutons tiennent dans la largeur,
+   donc ouvrir le menu burger ne fait plus glisser la page. */
+@media (max-width: 780px) {
+    .main-header .header-content {
+        gap: 10px;
+    }
+
+    .main-header .search-toggle {
+        width: 38px;
+        height: 38px;
+        margin-right: 0;
+    }
+
+    .main-header .menu-toggle {
+        padding: 6px 4px;
+    }
+}
+
+@media (max-width: 340px) {
+    .main-header .header-content {
+        gap: 6px;
+    }
+
+    .main-header .search-toggle {
+        width: 34px;
+        height: 34px;
+    }
+
+    .main-header .menu-toggle {
+        padding: 4px 2px;
+    }
+
+    .main-header .brand-text strong,
+    .main-header .brand-text small {
+        font-size: 14px;
+    }
+}
+
+/* Liste déroulante des catégories (documents et galerie) : même style que les filtres du site */
+.dynamic-select {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    min-height: 46px;
+    padding: 0 42px 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background-color: var(--white);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23102744' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 12px 8px;
+    color: var(--navy);
+    font-family: var(--font-main);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    cursor: pointer;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.dynamic-select:hover {
+    border-color: var(--gold);
+}
+
+.dynamic-select:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201, 163, 79, .18);
+}
+
+.dynamic-select:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.dynamic-select option {
+    color: var(--navy);
+    background: var(--white);
+    font-weight: 500;
+}
+
+.gallery-filters .dynamic-select,
+#documentsFilters .dynamic-select {
+    max-width: 320px;
+}
+
+@media (max-width: 520px) {
+    .dynamic-select {
+        max-width: 100%;
+    }
 }
