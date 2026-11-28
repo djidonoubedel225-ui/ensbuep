@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://tvvnzqvbwggqqpkcjzxl.supabase.co" crossorigin>
+<script>(function(){var w=window,p=0;var of=w.fetch;if(!of)return;w.buepPending=0;w.fetch=function(){var u=arguments[0];var s=typeof u==='string'?u:(u&&u.url)||'';var t=s.indexOf('supabase.co')>-1;if(t){p++;w.buepPending=p}var r=of.apply(this,arguments);if(t){r.then(function(){p--;w.buepPending=p},function(){p--;w.buepPending=p})}return r}})();</script>
+<script>try{var de=document.documentElement;if(!sessionStorage.getItem('buep-entered')&&window.matchMedia('(max-width: 760px)').matches){de.classList.add('splash-on');}}catch(e){}</script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <meta name="theme-color" content="#102744">
+    <meta name="description" content="Portail institutionnel du Bureau d'Union des Élèves-Professeurs de l'École Normale Supérieure de Porto-Novo.">
+
+    <title>BUEP-ENS/PN | Portail institutionnel</title>
+
+    <script>try{var l=JSON.parse(localStorage.getItem("buep-logo-cache")||"null");if(l&&l.data){document.documentElement.style.setProperty("--buep-logo","url(\""+l.data+"\")");document.documentElement.classList.add("logo-cached")}}catch(e){}</script>
+    <link rel="stylesheet" href="assets/css/style.css?v=137">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=optional" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=optional"></noscript>
+
+<style>
+/* Écran de chargement : le trait doré du fond se remplit et indique la progression */
+.site-splash { display: none; }
+html.splash-on .site-splash {
+  display: flex; position: fixed; inset: 0; z-index: 9999; overflow: hidden;
+  flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(8,22,42,.8);
+  backdrop-filter: blur(22px) saturate(120%); -webkit-backdrop-filter: blur(22px) saturate(120%);
+  transition: opacity .45s ease;
+}
+html.splash-on { overflow: hidden; }
+html.splash-leave .site-splash { opacity: 0; pointer-events: none; }
+.site-splash::before {
+  content: ""; position: absolute; inset: 0; background: rgba(104,102,98,.62);
+  backdrop-filter: blur(22px) saturate(110%); -webkit-backdrop-filter: blur(22px) saturate(110%);
+  clip-path: polygon(0 0, 50% 0, 38% 100%, 0 100%); pointer-events: none;
+}
+.splash-stage {
+  position: absolute; z-index: 1; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px; max-width: 88vw; box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.splash-logo {
+  width: 200px; height: 200px; border-radius: 50%; max-width: 100%;
+  background: #fff center / 74% no-repeat;
+  border: 7px solid #d6ad55;
+  box-shadow: 0 14px 40px rgba(0,0,0,.22);
+}
+.splash-logo.splash-fallback {
+  display: flex; align-items: center; justify-content: center;
+  color: #0b1f3a; font-weight: 800; font-size: 34px; letter-spacing: .04em;
+}
+.splash-name { color: #fff; font-weight: 800; letter-spacing: .16em; font-size: 30px; line-height: 1; }
+.splash-pct { color: #000; font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.splash-bar { width: 100%; height: 8px; border-radius: 999px; background: rgba(255,255,255,.22); overflow: hidden; }
+.splash-fill { width: 0; height: 100%; border-radius: 999px; background: #d6ad55; transition: width .3s linear; }
+.splash-caption {
+  width: 100%; text-align: center; color: #fff; white-space: nowrap;
+  font-size: 18px; font-weight: 800; line-height: 1.3; min-height: 26px;
+}
+.splash-foot {
+  position: absolute; z-index: 3; left: 50%; bottom: 26px; transform: translateX(-50%);
+  width: max-content; max-width: 90vw; padding: 9px 20px; border-radius: 999px;
+  background: #fff; color: #000; box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  text-align: center; font-size: 12px; font-weight: 700; line-height: 1.5; letter-spacing: .06em;
+}
+/* Ordinateur : la pastille est centrée sur la partie bleue */
+@media (min-width: 761px) {
+  .splash-foot { left: 50%; }
+}
+@media (max-width: 760px) {
+  .site-splash, .site-splash::before { backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .site-splash { background: rgba(8,22,42,.92); }
+  .site-splash::before { background: rgba(52,48,40,.92); }
+  .splash-logo { width: min(200px, 50vw); height: min(200px, 50vw); }
+  .splash-name { font-size: 26px; }
+  .splash-stage { gap: 12px; width: 84vw; max-width: 84vw; }
+  .splash-pct { font-size: 28px; }
+  .splash-caption { font-size: 16px; }
+}
+</style>
+    <link rel="manifest" href="manifest.webmanifest?v=131">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="BUEP">
+</head>
+
+<body>
+    <div class="site-splash" id="siteSplash" aria-hidden="true">
+        <div class="splash-stage">
+            <div class="splash-logo" id="splashLogo"></div>
+            <div class="splash-name">LE BUEP</div>
+            <div class="splash-bar"><div class="splash-fill" id="splashFill"></div></div>
+            <div class="splash-caption" id="splashCaption">Chargement des données…</div>
+        </div>
+        <div class="splash-foot">– PORTAIL INSTITUTIONNEL –</div>
+    </div>
+    </div>
+    </div>
+<script>try{var lg=JSON.parse(localStorage.getItem('buep-logo-cache')||'null');var el=document.getElementById('splashLogo');if(el){if(lg&&lg.data){el.style.backgroundImage='url("'+lg.data+'")'}else{el.style.backgroundImage='url("assets/img/logo-buep.png")'}}}catch(e){}</script>
+
+    <!-- BARRE INSTITUTIONNELLE -->
+    <div class="topbar">
+        <div class="container topbar-content">
+            <p>Fédération Nationale des Étudiants du Bénin · ENS de Porto-Novo</p>
+            <div class="topbar-links">
+                <span>Union des Élèves-Professeurs de l'École Normale Supérieure</span>
+                <span class="topbar-separator">|</span>
+                <span>BUEP-ENS/PN</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- EN-TÊTE PRINCIPAL -->
+    <header class="main-header">
+        <div class="container header-content">
+
+            <a href="index.html" class="brand">
+                <div class="brand-logo"></div>
+
+                <div class="brand-text">
+                    <strong class="wm" aria-label="LE BUEP"><span>L</span><span>E</span><span class="wm-sp"></span><span>B</span><span>U</span><span>E</span><span>P</span></strong>
+                    <small>Travail · Solidarité · Excellence</small>
+                </div>
+            </a>
+
+            <button type="button" class="search-toggle" aria-label="Rechercher sur le site"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+            <button class="menu-toggle"
+                    id="menuToggle"
+                    aria-label="Ouvrir le menu"
+                    aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <a href="index.html" class="active">Accueil</a>
+                <a href="pages/le-buep.html">Le BUEP</a>
+                <a href="pages/bureau-executif.html">Organigramme du Bureau</a>
+                <a href="pages/actualites.html">Actualités</a>
+                <a href="pages/activites.html">Activités</a>
+                <a href="pages/vie-associative.html">Vie associative</a>
+                <a href="pages/galerie.html">Galerie</a>
+                <a href="pages/documents.html">Documents</a>
+                <a href="pages/contact.html">Contact</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+
+        <!-- SECTION HERO -->
+        <section class="hero">
+            <div class="hero-overlay"></div>
+
+            <div class="container hero-content">
+                <span class="hero-label">
+                    PORTAIL INSTITUTIONNEL
+                </span>
+
+                <h1 data-db></h1>
+
+                <p data-db></p>
+
+                <div class="hero-actions">
+                    <a href="pages/le-buep.html" class="btn btn-gold">
+                        Découvrir le BUEP
+                    </a>
+
+                    <a href="pages/actualites.html" class="btn btn-outline">
+                        Nos actualités
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- MOT DU PRÉSIDENT -->
+        <section class="president-section section-padding">
+            <div class="container president-grid">
+
+                <div class="president-aside">
+                    <div class="section-heading">
+                        <span class="eyebrow">ÉDITORIAL</span>
+                        <h2>Le mot du Président</h2>
+                        <div class="gold-line"></div>
+                    </div>
+
+                    <figure class="president-photo" id="presidentPhotoBox" hidden>
+                        <img id="presidentPhoto" alt="Photo du Président">
+                    </figure>
+                </div>
+
+                <div class="president-content" data-db>
+                    <div class="president-signature">
+                        <strong id="presidentName" data-db></strong>
+                        <span id="presidentRole" data-db></span>
+                        <span class="president-mandate" id="presidentMandate" hidden></span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ACTUALITÉS -->
+        <section class="news-section section-padding">
+            <div class="container">
+
+                <div class="section-top">
+                    <div class="section-heading">
+                        <span class="eyebrow">RESTEZ INFORMÉS</span>
+                        <h2>À la une</h2>
+                    <div class="gold-line"></div>
+                        <p>Les dernières informations de la Normalie.</p>                </div>
+
+                    <a href="pages/actualites.html" class="text-link">
+                        Toutes les actualités →
+                    </a>
+                </div>
+
+                <div class="news-grid" id="newsContainer">
+                    <p class="news-empty">Chargement des actualités...</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BLOCS DYNAMIQUES (administration) -->
+        <section class="home-blocks section-padding" id="homeBlocks" hidden></section>
+
+        <!-- ACCÈS RAPIDES -->
+        <section class="quick-section section-padding">
+            <div class="container">
+
+                <div class="section-heading centered">
+                    <span class="eyebrow">EXPLOREZ LE PORTAIL</span>
+                    <h2>La vie normalienne</h2>
+                    <p>Retrouvez les principales rubriques du BUEP.</p>
+                </div>
+
+                <div class="quick-grid">
+
+                    <a href="pages/bureau-executif.html" class="quick-card">
+                        <span class="quick-number">01</span>
+                        <h3>Bureau exécutif</h3>
+                        <p>Découvrez l'équipe dirigeante du BUEP.</p>
+                        <span class="quick-arrow">→</span>
+                    </a>
+
+                    <a href="pages/activites.html" class="quick-card">
+                        <span class="quick-number">02</span>
+                        <h3>Nos activités</h3>
+                        <p>Explorez nos projets et réalisations.</p>
+                        <span class="quick-arrow">→</span>
+                    </a>
+
+                    <a href="pages/vie-associative.html" class="quick-card">
+                        <span class="quick-number">03</span>
+                        <h3>Vie associative</h3>
+                        <p>Découvrez les clubs et associations.</p>
+                        <span class="quick-arrow">→</span>
+                    </a>
+
+                    <a href="pages/documents.html" class="quick-card">
+                        <span class="quick-number">04</span>
+                        <h3>Documents</h3>
+                        <p>Accédez aux ressources institutionnelles.</p>
+                        <span class="quick-arrow">→</span>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PIED DE PAGE -->
+    <footer class="main-footer">
+        <div class="container footer-grid">
+
+            <div class="footer-brand">
+                <a href="index.html" class="brand footer-logo">
+                    <div class="brand-logo"></div>
+
+                    <div class="brand-text">
+                        <strong class="wm" aria-label="LE BUEP"><span>L</span><span>E</span><span class="wm-sp"></span><span>B</span><span>U</span><span>E</span><span>P</span></strong>
+                        <small>Travail · Solidarité · Excellence</small>
+                    </div>
+                </a>
+
+                <p>
+                    Le portail institutionnel du Bureau d'Union
+                    des Élèves-Professeurs de l'ENS de Porto-Novo.
+                </p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Navigation</h3>
+                <a href="pages/le-buep.html">Le BUEP</a>
+                <a href="pages/bureau-executif.html">Organigramme du Bureau</a>
+                <a href="pages/actualites.html">Actualités</a>
+                <a href="pages/activites.html">Activités</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Informations</h3>
+                <a href="pages/documents.html">Documents</a>
+                <a href="pages/galerie.html">Galerie</a>
+                <a href="pages/contact.html">Nous contacter</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <p>
+                    © <span id="currentYear">2026</span>
+                    BUEP-ENS/PN. Tous droits réservés.
+                </p>
+                <nav class="legal-links" aria-label="Informations légales">
+                    <a href="pages/confidentialite.html">Confidentialité</a>
+                    <a href="pages/cookies.html">Cookies</a>
+                    <a href="pages/conditions.html">Conditions d'utilisation</a>
+                </nav>
+                <span>Fédération Nationale des Étudiants du Bénin</span>
+            </div>
+        </div>
+    </footer>
+    
+    <script>try{var mc=JSON.parse(localStorage.getItem("buep-settings-cache")||"null");var mm=mc&&mc.institution_identity&&String(mc.institution_identity.motto||"").trim();if(mm){document.querySelectorAll("[data-motto]").forEach(function(e){e.textContent=mm;e.hidden=false})}}catch(e){}</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/supabase.js"></script>
+    <script src="assets/js/tracking.js?v=1"></script>
+        <script src="assets/js/site-settings.js?v=39"></script>
+    <script src="assets/js/site-links.js?v=82"></script>
+    <script src="assets/js/app.js?v=115"></script>
+<script src="assets/js/splash.js" defer></script>
+
+<script src="assets/js/fluid.js" defer></script>
+<script src="assets/js/install.js" defer></script>
+</body>
+</html>
