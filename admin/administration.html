@@ -138,8 +138,13 @@ input:focus,textarea:focus,select:focus{
 .rights-table input{width:18px;height:18px;accent-color:var(--navy);cursor:pointer}
 .rights-na{color:var(--muted)}
 </style>
-<link rel="stylesheet" href="admin-site.css">
-<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="admin-site.css?v=78">
+<link rel="stylesheet" href="admin-sidebar.css?v=78">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>html:not([data-can-admins="1"]) .admins-link{display:none !important}</style>
+<style>html:not([data-page-ok]) .layout{visibility:hidden}</style>
 </head>
 
 <body>
@@ -155,7 +160,7 @@ input:focus,textarea:focus,select:focus{
 
  <nav class="navigation">
   <a href="gestion.html" class="nav-link"><span class="nav-icon">⌂</span><span>Tableau de bord</span></a>
-  <a href="administration.html" class="nav-link active"><span class="nav-icon">⚙</span><span>Gestion des administrateurs</span></a>
+  <a href="administration.html" class="admins-link nav-link active"><span class="nav-icon">⚙</span><span>Gestion des administrateurs</span></a>
   <a href="organigramme.html" class="nav-link"><span class="nav-icon">▤</span><span>Gestion de l'organigramme</span></a>
  </nav>
 
@@ -405,6 +410,7 @@ input:focus,textarea:focus,select:focus{
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../assets/js/config.js"></script>
 <script src="../assets/js/supabase.js"></script>
+<script src="admin-access.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
@@ -1633,21 +1639,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   currentUser = sessionData.session.user;
 
-  const {data:profile,error:profileError} = await db
-   .from("profiles")
-   .select("user_id,is_principal_admin,account_status")
-   .eq("user_id",currentUser.id)
-   .maybeSingle();
+  const allowed = await window.buepCanManageAdmins();
 
-  if(profileError) throw profileError;
+  if(!allowed) {
 
-  if(
-   !profile ||
-   profile.account_status !== "active" ||
-   !profile.is_principal_admin
-  ) {
-
-   notify("Accès réservé à l'administrateur principal.");
+   notify("Accès réservé à l'administrateur principal et aux administrateurs habilités.");
 
    setTimeout(() => {
     window.location.replace("gestion.html");
@@ -1655,6 +1651,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
    return;
   }
+
+  document.documentElement.dataset.pageOk = "1";
 
   await Promise.all([
    loadAdmins(),

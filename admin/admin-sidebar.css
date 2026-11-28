@@ -1,3 +1,13 @@
+
+/* Police de secours de même gabarit que Plus Jakarta Sans : le passage de l'une à l'autre se voit à peine. */
+@font-face {
+    font-family: "Jakarta Fallback";
+    src: local("Arial"), local("Helvetica");
+    size-adjust: 104%;
+    ascent-override: 96%;
+    descent-override: 26%;
+    line-gap-override: 0%;
+}
 /* Barre latérale de navigation de l'administration (même modèle que gestion.html).
    Chargée après admin-site.css. */
 
@@ -26,7 +36,7 @@
 }
 
 .brand-name {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "BUEP-Digits", "Playfair Display", Georgia, serif;
     font-size: 17px;
     font-weight: 700;
     line-height: 1.4;
@@ -205,3 +215,32 @@
         z-index: 15;
     }
 }
+
+/* =========================================
+   POLICE UNIQUE DU SITE ET DE L'ADMINISTRATION : PLUS JAKARTA SANS
+   Une seule famille, déjà disponible sur l'appareil : aucun
+   changement de police à l'affichage, y compris les chiffres,
+   les champs et les références.
+   ========================================= */
+html body,
+html body *,
+html body *::before,
+html body *::after,
+.digits,
+.ref-code,
+.ref-code *,
+.track-code,
+input.ref-code,
+.ref-code .digits {
+    font-family: "Plus Jakarta Sans", "Jakarta Fallback", Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+}
+
+/* v76 : espace entre les mots plus marqué, pour une lecture plus claire */
+html body, html body * {
+    word-spacing: .14em;
+}
+
+/* v78 : liens « Accès rapide au site » contenus dans la carte (2 colonnes égales, sans débordement) */
+.quick-access, .quick-access * { box-sizing: border-box; }
+.quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.quick-links a { min-width: 0; overflow-wrap: anywhere; line-height: 1.3; }

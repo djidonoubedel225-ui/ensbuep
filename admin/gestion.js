@@ -3927,7 +3927,7 @@ function renderMessagesTable() {
 
     body.innerHTML = rows.slice(0, messagesLimit).map(message => `
         <tr>
-            <td><strong>${escapeHTML(message.reference || "—")}</strong></td>
+            <td><strong class="ref-code">${escapeHTML(message.reference || "—")}</strong></td>
 
             <td>
                 ${escapeHTML(message.sender_name)}<br>
@@ -4014,6 +4014,43 @@ async function openMessage(id) {
     renderMessageDetail(message, replies);
 }
 
+// Pièces jointes d'un message : liens temporaires (10 minutes) vers des fichiers privés.
+async function loadMessageAttachments(messageId) {
+    const box = document.getElementById("messageAttachments");
+    if(!box) return;
+
+    const { data, error } = await supabase
+        .from("message_attachments")
+        .select("id, storage_path, file_name, size_bytes")
+        .eq("message_id", messageId)
+        .order("created_at", { ascending: true });
+
+    if(!box.isConnected) return;
+
+    if(error) {
+        box.textContent = "Pièces jointes indisponibles : " + error.message;
+        return;
+    }
+
+    if(!data || !data.length) {
+        box.textContent = "Aucune pièce jointe.";
+        return;
+    }
+
+    const links = await Promise.all(data.map(async item => {
+        const { data: signed } = await supabase.storage
+            .from("buep-message-attachments")
+            .createSignedUrl(item.storage_path, 600);
+
+        const url = signed?.signedUrl || "#";
+        const size = Math.max(1, Math.round((item.size_bytes || 0) / 1024));
+
+        return `<li><a href="${escapeHTML(url)}" target="_blank" rel="noopener">${escapeHTML(item.file_name)}</a> <span style="color:var(--muted)">(${size} Ko)</span></li>`;
+    }));
+
+    box.innerHTML = `<strong>Pièces jointes</strong><ul style="margin:6px 0 0 18px">${links.join("")}</ul>`;
+}
+
 function renderMessageDetail(message, replies) {
     const edit = messagesPermissions.edit;
     const disabled = edit ? "" : "disabled";
@@ -4051,6 +4088,8 @@ function renderMessageDetail(message, replies) {
         </div>
 
         <div class="step-item" style="white-space:pre-wrap;font-size:13px">${escapeHTML(message.message_body)}</div>
+
+        <div id="messageAttachments" class="step-item" style="margin-top:12px;font-size:13px">Chargement des pièces jointes...</div>
     </div>
 
     <div class="panel">
@@ -4119,6 +4158,8 @@ function renderMessageDetail(message, replies) {
         </div>
     </div>`;
 
+    loadMessageAttachments(message.id);
+
     $("backToMessages").addEventListener("click", () => {
         renderMessagesShell();
         renderMessagesTable();
@@ -4151,6 +4192,24 @@ function renderMessageDetail(message, replies) {
 }
 
 async function deleteMessagesByIds(ids) {
+    // Les pièces jointes sont effacées du stockage d'abord : si cela échoue, rien n'est supprimé.
+    const { data: attachments, error: attachmentsError } = await supabase
+        .from("message_attachments")
+        .select("storage_path")
+        .in("message_id", ids);
+
+    if(attachmentsError) throw attachmentsError;
+
+    const paths = (attachments || []).map(item => item.storage_path).filter(Boolean);
+
+    if(paths.length) {
+        const { error: storageError } = await supabase.storage
+            .from("buep-message-attachments")
+            .remove(paths);
+
+        if(storageError) throw new Error("pièces jointes non effacées : " + storageError.message);
+    }
+
     const {error: repliesError} = await deleteChecked("message_replies", "message_id", ids, "messages");
 
     if(repliesError) throw repliesError;
@@ -8036,7 +8095,7 @@ return `
         <td>${item.item_type === "section" ? "Section" : "Lien"}</td>
         <td style="font-size:12px;color:var(--muted)">${escapeHTML(item.url || "—")}</td>
         <td>${item.is_visible ? "Visible" : "Masqué"}${item.is_active ? "" : " · inactif"}</td>
-        <td><div style="display:flex;gap:6px;flex-wrap:wrap">${actions.join("")}</div></td>
+        <td><div class="actions">${actions.join("")}</div></td>
     </tr>`;
 
 }
@@ -8339,7 +8398,7 @@ tbody.innerHTML = homepageBlocksCache.map(block => {
                 ${block.display_end ? " au " + formatDate(block.display_end) : ""}
                 ${!block.display_start && !block.display_end ? "Permanent" : ""}
             </td>
-            <td><div style="display:flex;gap:6px;flex-wrap:wrap">${actions.join("")}</div></td>
+            <td><div class="actions">${actions.join("")}</div></td>
         </tr>`;
 }).join("");
 
@@ -9117,7 +9176,7 @@ tbody.innerHTML = rows.map(content => {
             <td>
                 <span class="badge ${escapeHTML(content.status)}">${escapeHTML(pubStatusLabel(content.status))}</span>
             </td>
-            <td><div style="display:flex;gap:6px;flex-wrap:wrap">${actions.join("")}</div></td>
+            <td><div class="actions">${actions.join("")}</div></td>
         </tr>`;
 }).join("");
 

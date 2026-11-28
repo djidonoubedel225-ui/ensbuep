@@ -2,14 +2,23 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>
+/* Lien reçu par e-mail : l'adresse contient l'invitation (type=invite). Sinon, la page ne s'ouvre pas. */
+window.__buepInvite = (function () {
+  var h = window.location.hash || "";
+  return /access_token=/.test(h) && /type=invite/.test(h) && !/error/.test(h) ? h : null;
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b1f3a">
 <title>Activation du compte | BUEP-ENS/PN</title>
 <link rel="stylesheet" href="admin-site.css">
 <style>
-body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; box-sizing: border-box; }
+.activation { display: none; margin: 0 auto; }
+.activation.is-open { display: block; }
 .activation { width: 100%; max-width: 440px; background: var(--white, #fff); border: 1px solid var(--border); border-top: 4px solid var(--gold); border-radius: 14px; padding: 30px 28px; box-shadow: 0 18px 40px rgba(11,31,58,.10); }
-.activation h1 { font-family: "Playfair Display", Georgia, serif; font-size: 24px; color: var(--navy); margin-bottom: 6px; }
+.activation h1 { font-family: "BUEP-Digits", "Playfair Display", Georgia, serif; font-size: 24px; color: var(--navy); margin-bottom: 6px; }
 .activation p { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
 .activation label { display: block; font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
 .activation input { width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 8px; font: inherit; margin-bottom: 14px; }
@@ -21,6 +30,9 @@ body { min-height: 100vh; display: flex; align-items: center; justify-content: c
 .activation .hint { font-size: 12px; color: var(--muted); margin-top: 12px; }
 .hidden { display: none !important; }
 </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -54,6 +66,12 @@ body { min-height: 100vh; display: flex; align-items: center; justify-content: c
 <script src="../assets/js/supabase.js"></script>
 <script>
 (function () {
+  if (!window.__buepInvite) {
+    window.location.replace("connexion.html");
+    return;
+  }
+  document.querySelector(".activation").classList.add("is-open");
+
   const checking = document.getElementById("checking");
   const invalid = document.getElementById("invalid");
   const form = document.getElementById("passwordForm");

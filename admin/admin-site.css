@@ -1,7 +1,23 @@
+
+/* Police de secours de même gabarit que Plus Jakarta Sans : le passage de l'une à l'autre se voit à peine. */
+@font-face {
+    font-family: "Jakarta Fallback";
+    src: local("Arial"), local("Helvetica");
+    size-adjust: 104%;
+    ascent-override: 96%;
+    descent-override: 26%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "BUEP-Digits";
+    src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"), local("Times");
+    unicode-range: U+0030-0039;
+    font-display: swap;
+}
 /* Administration : charte du site (bleu marine, or, Playfair + DM Sans).
    Chargée après le style de chaque page. */
 
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap");
 
 :root {
     --navy: #0b1f3a;
@@ -16,7 +32,7 @@
 }
 
 body {
-    font-family: "DM Sans", Arial, sans-serif;
+    font-family: "BUEP-Digits", "DM Sans", Arial, sans-serif;
     background: var(--light);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
@@ -31,7 +47,7 @@ header {
 }
 
 header h1 {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "BUEP-Digits", "Playfair Display", Georgia, serif;
     font-size: 22px;
     letter-spacing: .3px;
 }
@@ -66,7 +82,7 @@ main {
 }
 
 .intro h2 {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "BUEP-Digits", "Playfair Display", Georgia, serif;
     font-size: 28px;
     color: var(--navy);
     margin-bottom: 6px;
@@ -111,7 +127,7 @@ main {
 /* Titres de section */
 .toolbar h3,
 .panel h3 {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "BUEP-Digits", "Playfair Display", Georgia, serif;
     color: var(--navy);
     font-size: 20px;
 }
@@ -236,7 +252,7 @@ label {
 }
 
 .item-info h4 {
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "BUEP-Digits", "Playfair Display", Georgia, serif;
     font-size: 17px;
     color: var(--navy);
 }
@@ -284,4 +300,42 @@ label {
     border-radius: 14px;
     background: #fff;
     padding: 34px;
+}
+
+/* Chiffres en Times New Roman partout ; les champs reprennent la police de leur zone */
+input, select, textarea, button { font-family: inherit; }
+
+
+/* Saisie : Atkinson Hyperlegible (prioritaire sur les règles des formulaires) */
+input, select, textarea, input[type="number"], input[type="text"], input[type="email"], input[type="tel"], input[type="search"] {
+    font-family: "Atkinson Hyperlegible", Arial, sans-serif !important;
+}
+
+/* Références et codes : IBM Plex Mono */
+.ref-code, .track-code, input.ref-code, .ref-code .digits {
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace !important;
+}
+
+/* =========================================
+   POLICE UNIQUE DU SITE ET DE L'ADMINISTRATION : PLUS JAKARTA SANS
+   Une seule famille, déjà disponible sur l'appareil : aucun
+   changement de police à l'affichage, y compris les chiffres,
+   les champs et les références.
+   ========================================= */
+html body,
+html body *,
+html body *::before,
+html body *::after,
+.digits,
+.ref-code,
+.ref-code *,
+.track-code,
+input.ref-code,
+.ref-code .digits {
+    font-family: "Plus Jakarta Sans", "Jakarta Fallback", Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+}
+
+/* v76 : espace entre les mots plus marqué, pour une lecture plus claire */
+html body, html body * {
+    word-spacing: .14em;
 }

@@ -77,8 +77,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid #e8d5a7;border-color:v
  .item-actions button{flex:1}
 }
 </style>
-<link rel="stylesheet" href="admin-site.css">
-<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="admin-site.css?v=78">
+<link rel="stylesheet" href="admin-sidebar.css?v=78">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>html:not([data-can-admins="1"]) .admins-link{display:none !important}</style>
 </head>
 
 <body>
@@ -94,7 +98,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #e8d5a7;border-color:v
 
  <nav class="navigation">
   <a href="gestion.html" class="nav-link"><span class="nav-icon">⌂</span><span>Tableau de bord</span></a>
-  <a href="administration.html" class="nav-link"><span class="nav-icon">⚙</span><span>Gestion des administrateurs</span></a>
+  <a href="administration.html" class="admins-link nav-link"><span class="nav-icon">⚙</span><span>Gestion des administrateurs</span></a>
   <a href="organigramme.html" class="nav-link active"><span class="nav-icon">▤</span><span>Gestion de l'organigramme</span></a>
  </nav>
 
@@ -254,6 +258,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid #e8d5a7;border-color:v
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../assets/js/config.js"></script>
 <script src="../assets/js/supabase.js"></script>
+<script src="admin-access.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", async () => {

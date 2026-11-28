@@ -8,9 +8,6 @@
 
     <title>Connexion administrateur | BUEP-ENS/PN</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -33,7 +30,7 @@
 
         body {
             min-height: 100vh;
-            font-family: "DM Sans", sans-serif;
+            font-family: "BUEP-Digits", "DM Sans", sans-serif;
             background:
                 linear-gradient(135deg, rgba(11,31,58,.97), rgba(21,55,94,.94));
             display: flex;
@@ -63,13 +60,13 @@
             justify-content: center;
             margin: 0 auto 16px;
             color: var(--gold);
-            font-family: "Playfair Display", serif;
+            font-family: "BUEP-Digits", "Playfair Display", serif;
             font-size: 27px;
             font-weight: 700;
         }
 
         .brand h1 {
-            font-family: "Playfair Display", serif;
+            font-family: "BUEP-Digits", "Playfair Display", serif;
             font-size: 25px;
             margin-bottom: 7px;
         }
@@ -198,6 +195,25 @@
             color: var(--gold);
         }
 
+        /* Ordinateur : formulaire compact, sans défilement de la page */
+        @media (min-width: 761px) {
+            body { padding: 16px 24px; }
+            .brand { margin-bottom: 16px; }
+            .brand h1 { font-size: 24px; margin-bottom: 4px; }
+            .brand p { font-size: 12px; }
+            .login-card { padding: 26px 30px; }
+            .card-heading { margin-bottom: 18px; }
+            .card-heading h2 { font-size: 20px; margin-bottom: 4px; }
+            .card-heading p { font-size: 13px; }
+            .form-group { margin-bottom: 14px; }
+            .form-group label { margin-bottom: 6px; }
+            .form-group input { height: 44px; }
+            .login-button { height: 46px; }
+            .feedback { margin-bottom: 12px; }
+            .security-note { margin-top: 16px; padding-top: 12px; }
+            .back-link { margin-top: 14px; }
+        }
+
         @media (max-width: 480px) {
             .login-card {
                 padding: 30px 22px;
@@ -207,15 +223,88 @@
                 font-size: 22px;
             }
         }
-    </style>
+    
+/* Panneau clair à gauche, séparé du formulaire par un trait penché. Le logo importé y figure en clair. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: #f7f4ec;
+  clip-path: polygon(0 0, 50% 0, 38% 100%, 0 100%);
+  pointer-events: none;
+  z-index: -2;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--gold, #d6ad55);
+  clip-path: polygon(50% 0, calc(50% + 3px) 0, calc(38% + 3px) 100%, 38% 100%);
+  pointer-events: none;
+  z-index: -2;
+}
+
+/* Logo importé : médaillon rond, centré dans le panneau clair */
+.login-panel-logo {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 19vw;
+  width: min(22vw, 250px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: #fff;
+  background-image: var(--login-logo, none);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 74%;
+  border: 6px solid var(--gold, #d6ad55);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .12);
+  pointer-events: none;
+  z-index: -1;
+  max-width: 100%;
+}
+html.has-login-logo .login-panel-logo { display: block; }
+
+@media (max-width: 760px) {
+  .login-panel-logo { display: none !important; }
+}
+
+/* Formulaire décalé légèrement vers la droite, sur PC */
+@media (min-width: 761px) {
+  body {
+    justify-content: flex-end;
+    padding-right: 9vw;
+  }
+}
+
+/* Sur téléphone, le panneau disparaît : le formulaire reste centré */
+@media (max-width: 760px) {
+  body::before,
+  body::after {
+    display: none;
+  }
+}
+
+        /* Police unique de la page (même famille que le reste du site) */
+        html body, html body * {
+            font-family: "Plus Jakarta Sans", Arial, sans-serif !important;
+            word-spacing: .14em;
+        }
+</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <div class="login-panel-logo" aria-hidden="true"></div>
 
     <main class="login-wrapper">
 
         <header class="brand">
-            <div class="brand-symbol">BUEP</div>
             <h1>BUEP-ENS/PN</h1>
             <p>Portail institutionnel de l'ENS de Porto-Novo</p>
         </header>
@@ -287,6 +376,41 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../assets/js/config.js"></script>
     <script src="../assets/js/supabase.js"></script>
+<script>
+(function () {
+  function setWatermark(url) {
+    if (url) {
+      document.documentElement.style.setProperty("--login-logo", 'url("' + url + '")');
+      document.documentElement.classList.add("has-login-logo");
+    }
+  }
+
+  // 0. Logo par défaut du portail : visible dès le premier affichage
+  setWatermark("../assets/img/logo-buep.png");
+
+  // 1. Logo déjà mémorisé dans le navigateur (affiché immédiatement)
+  try {
+    const cached = JSON.parse(localStorage.getItem("buep-logo-cache") || "null");
+    if (cached) setWatermark(cached.data || cached.url);
+  } catch (e) { /* pas de cache */ }
+
+  // 2. Sinon, le logo importé dans les réglages du site
+  const db = window.buepSupabase;
+  if (!db) return;
+  Promise.resolve(db.from("site_settings")
+    .select("setting_value")
+    .eq("setting_key", "site_branding")
+    .maybeSingle())
+    .then(({ data }) => {
+      const path = data && data.setting_value && data.setting_value.logo_path;
+      if (!path) return;
+      const { data: file } = db.storage.from("buep-public-assets").getPublicUrl(path);
+      if (file && file.publicUrl) setWatermark(file.publicUrl);
+    })
+    .catch(() => { /* filigrane facultatif */ });
+})();
+</script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {

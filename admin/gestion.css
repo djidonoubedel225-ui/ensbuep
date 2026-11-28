@@ -1,4 +1,20 @@
 
+/* Police de secours de même gabarit que Plus Jakarta Sans : le passage de l'une à l'autre se voit à peine. */
+@font-face {
+    font-family: "Jakarta Fallback";
+    src: local("Arial"), local("Helvetica");
+    size-adjust: 104%;
+    ascent-override: 96%;
+    descent-override: 26%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "BUEP-Digits";
+    src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"), local("Times");
+    unicode-range: U+0030-0039;
+    font-display: swap;
+}
 :root {
     --navy: #0b1f3a;
     --navy-light: #142d4d;
@@ -1132,8 +1148,8 @@ td strong {
     --border: #e3e8f0;
     --radius: 14px;
     --shadow: 0 8px 24px rgba(16, 39, 68, 0.06);
-    --font-title: 'Playfair Display', Georgia, serif;
-    --font-main: 'DM Sans', system-ui, sans-serif;
+    --font-title: "BUEP-Digits", "Playfair Display", Georgia, serif;
+    --font-main: "BUEP-Digits", "DM Sans", system-ui, sans-serif;
 }
 
 body {
@@ -1677,3 +1693,105 @@ textarea:focus {
         max-width: 42vw;
     }
 }
+
+/* Codes et numéros : zéro barré (0 ≠ O), chiffres alignés */
+.ref-code, .track-code, input[type="number"] {
+    font-family: "BUEP-Digits", 'Inter', sans-serif;
+    font-feature-settings: "zero" 1, "tnum" 1;
+    letter-spacing: .04em;
+}
+
+/* Chiffres en Times New Roman partout ; les champs reprennent la police de leur zone */
+input, select, textarea, button { font-family: inherit; }
+
+
+/* Saisie : Atkinson Hyperlegible (prioritaire sur les règles des formulaires) */
+input, select, textarea, input[type="number"], input[type="text"], input[type="email"], input[type="tel"], input[type="search"] {
+    font-family: "Atkinson Hyperlegible", Arial, sans-serif !important;
+}
+
+/* Références et codes : IBM Plex Mono */
+.ref-code, .track-code, input.ref-code, .ref-code .digits {
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace !important;
+}
+
+/* Actions d'une ligne de tableau : deux colonnes égales (2 × 2 pour quatre boutons) */
+td > .actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    min-width: 230px;
+}
+
+td > .actions > .btn {
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    text-align: center;
+    white-space: nowrap;
+}
+
+@media (max-width: 759px) {
+    table {
+        min-width: 600px;
+    }
+
+    th {
+        white-space: normal;
+    }
+
+    td, th {
+        min-width: 0;
+        padding-left: 8px;
+        padding-right: 8px;
+        overflow-wrap: anywhere;
+    }
+
+    td:last-child {
+        min-width: 176px;
+    }
+
+    td > .actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        min-width: 0;
+        width: 100%;
+        gap: 6px;
+    }
+
+    td > .actions > .btn {
+        padding: 8px 4px;
+        font-size: 12px;
+        white-space: normal;
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+/* =========================================
+   POLICE UNIQUE DU SITE ET DE L'ADMINISTRATION : PLUS JAKARTA SANS
+   Une seule famille, déjà disponible sur l'appareil : aucun
+   changement de police à l'affichage, y compris les chiffres,
+   les champs et les références.
+   ========================================= */
+html body,
+html body *,
+html body *::before,
+html body *::after,
+.digits,
+.ref-code,
+.ref-code *,
+.track-code,
+input.ref-code,
+.ref-code .digits {
+    font-family: "Plus Jakarta Sans", "Jakarta Fallback", Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+}
+
+/* v76 : espace entre les mots plus marqué, pour une lecture plus claire */
+html body, html body * {
+    word-spacing: .14em;
+}
+
+/* v78 : liens « Accès rapide au site » contenus dans la carte (2 colonnes égales, sans débordement) */
+.quick-access, .quick-access * { box-sizing: border-box; }
+.quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.quick-links a { min-width: 0; overflow-wrap: anywhere; line-height: 1.3; }
